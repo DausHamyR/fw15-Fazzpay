@@ -3,7 +3,7 @@ import Image from 'next/image';
 import mail from '../../../../public/mail.png';
 import lock from '../../../../public/lock.png';
 import phone from '../../../../public/Group 57.png';
-import {AiOutlineEyeInvisible} from 'react-icons/ai';
+import {AiOutlineEyeInvisible, AiOutlineEye} from 'react-icons/ai';
 import Link from 'next/link'
 import Head from 'next/head';
 import {useRouter} from 'next/router';
@@ -34,21 +34,39 @@ export const getServerSideProps = withIronSessionSsr(
   );
 
 function Login() {
+    const [errorMessage, setErrorMessage] = useState('')
+    const [successMessage, setSuccessMessage] = useState('')
     const [loading, setLoading] = useState(false)
     const router = useRouter()
     const doLogin = async(e)=> {
-        setLoading(true)
-        e.preventDefault()
-        const {value: email} = e.target.email
-        const {value: password} = e.target.password
-        const form = new URLSearchParams({
-            email, password
-        })
-        const {data} = await axios.post('/api/login', form.toString())
-        setLoading(false)
-        if(data?.results?.token){
-            router.push('/home')
+        try{
+            setLoading(true)
+            e.preventDefault()
+            const {value: email} = e.target.email
+            const {value: password} = e.target.password
+            setSuccessMessage('')
+            const form = new URLSearchParams({
+                email, password
+            })
+            const {data} = await axios.post('/api/login', form.toString())
+            setSuccessMessage(data.message)
+            setErrorMessage('')
+            setLoading(false)
+            if(data?.results?.token){
+                router.push('/home')
+            }
+        }catch(err){
+            const message = err?.response?.data?.message
+            if(message){
+                setErrorMessage(message)
+            }
+            setSuccessMessage('')
         }
+    }
+
+    const [showPassword, setShowPassword] = useState(false)
+    const handleTogglePassword = () => {
+        setShowPassword(!showPassword)
     }
 
     return (
@@ -76,6 +94,16 @@ function Login() {
     With All Devices and All Platforms
     With 30.000+ Users</div>
                     <div className='w-[433px] text-slate-400 leading-8 text-base'>Transfering money is eassier than ever, you can access FazzPay wherever you are. Desktop, laptop, mobile phone? we cover all of that for you!</div>
+                    {errorMessage && (
+                    <div>
+                        <h1 className="alert alert-error mt-4 w-[330px]">{errorMessage}</h1>
+                    </div>
+                    )}
+                    {successMessage && (
+                    <div>
+                        <h1 className="alert alert-success mt-4 w-[330px]">{successMessage}</h1>
+                    </div>
+                    )}
                     <form onSubmit={doLogin} className='grid gap-12 relative top-8'>
                         <div className='grid gap-1'>
                             <div className='flex gap-4'>
@@ -87,11 +115,16 @@ function Login() {
                         <div className='grid gap-1'>
                             <div className='flex gap-4'>
                                 <Image src={lock} alt='lock' />
-                                <input name='password' type='password' placeholder='Enter your password' className='border-none pl-4 tracking-wider w-full border-slate-400'/>
-                                <AiOutlineEyeInvisible size={25}/>
+                                <input name='password' type={showPassword? 'text' : 'password'} placeholder='Enter your password' className='border-none pl-4 tracking-wider w-full border-slate-400'/>
+                                <div onClick={handleTogglePassword}>
+                                    {showPassword ? 
+                                        <AiOutlineEye size={25}/> :
+                                        <AiOutlineEyeInvisible size={25}/> 
+                                    }
+                                </div>
                             </div>
                             <hr className='h-0.5 bg-slate-300' />
-                            <Link href='/auth/reset-password' className='place-self-end top-2 relative font-semibold text-slate-500'>Forgot Password</Link>
+                            <Link href='/auth/forgot-password' className='place-self-end top-2 relative font-semibold text-slate-500'>Forgot Password</Link>
                         </div>
                         <div className='grid gap-4'>
                             <button disabled={loading} className='btn btn-primary w-full tracking-wider'>

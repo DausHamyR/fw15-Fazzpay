@@ -1,29 +1,48 @@
 import React from 'react'
 import Image from 'next/image';
 import {FiBell} from 'react-icons/fi'
-import logout from '../../../public/log-out.png';
-import plusTransfer from '../../../public/Group 33.png';
-import topUp from '../../../public/Group 34.png';
-import avatar from '../../../public/Rectangle 25.png';
-import graphic from '../../../public/graphic.png';
-import grid from '../../../public/grid.svg';
+import logout from '../../../../public/log-out.png';
+import grid from '../../../../public/grid.svg';
 import {AiOutlineUser} from 'react-icons/ai';
 import {AiOutlinePlus} from 'react-icons/ai';
 import {AiOutlineArrowUp} from 'react-icons/ai';
-import {AiOutlineArrowRight} from 'react-icons/ai';
-import {AiOutlineEdit} from 'react-icons/ai';
 import Link from 'next/link'
+import { withIronSessionSsr } from "iron-session/next";
+import cookieConfig from '@/helpers/cookieConfig';
+import checkCredentials from '@/helpers/checkCredentials';
+import axios from 'axios';
 
-function PersonalInformation() {
+export const getServerSideProps = withIronSessionSsr(
+    async function getServerSideProps({ req, res }) {
+        const token = req.session?.token
+        checkCredentials(token, res, '/auth/login')
+
+      const {data} = await axios.get('https://cute-lime-goldfish-toga.cyclic.app/profile', {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+      })
+  
+      return {
+        props: {
+          token,
+          user: data.results
+        },
+      };
+    },
+    cookieConfig
+  );
+
+function PersonalInformation({user}) {
     return (
         <div className='bg-[#E5E5E5]'>
             <div className='w-full bg-white h-24 flex justify-around items-center'>
                 <div className='text-blue-500 text-2xl font-bold'>FazzPay</div>
                 <div className='flex items-center gap-6'>
-                    <Image src={avatar} alt='avatar'/>
+                    <Image className='rounded-xl' src={user.picture} width={50} height={50} alt='avatar'/>
                     <div className='grid'>
-                        <div>Robert Chandler</div>
-                        <div>+62 8139 3877 7946</div>
+                        <div>{user.fullName}</div>
+                        <div>{user.phones}</div>
                     </div>
                     <FiBell size={25}/>
                 </div>
@@ -48,9 +67,9 @@ function PersonalInformation() {
                             <Link href='/profile'>Profile</Link>
                         </div>
                     </div>
-                    <div className='flex gap-2 items-center font-semibold'>
+                    <Link href='/auth/logout' className='flex gap-2 items-center font-semibold'>
                         <Image src={logout} alt='logout'/>Logout
-                    </div>
+                    </Link>
                 </div>
                 <div className='w-[950px] h-[678px] bg-white relative top-12 rounded-xl'>
                     <div className='relative left-12 top-8 grid gap-6'>
@@ -60,20 +79,20 @@ function PersonalInformation() {
                     <div className='grid justify-center gap-4 relative top-16'>
                         <div className='w-[840px] h-[92px] bg-slate-100 rounded-xl grid content-center gap-2 pl-6'>
                             <div className='text-sm text-slate-500'>First Name</div>
-                            <div className='font-bold'>Robert</div>
+                            <div className='font-bold'>{user.fullName.split(' ')[0]}</div>
                         </div>
                         <div className='w-[840px] h-[92px] bg-slate-100 rounded-xl grid content-center gap-2 pl-6'>
                             <div className='text-sm text-slate-500'>Last Name</div>
-                            <div className='font-bold'>Chandler</div>
+                            <div className='font-bold'>{user.fullName.split(' ').pop()}</div>
                         </div>
                         <div className='w-[840px] h-[92px] bg-slate-100 rounded-xl grid content-center gap-2 pl-6'>
                             <div className='text-sm text-slate-500'>Verified E-mail</div>
-                            <div className='font-bold'>pewdiepie1@gmail.com</div>
+                            <div className='font-bold'>{user.email}</div>
                         </div>
                         <div className='w-[840px] h-[92px] flex justify-between items-center bg-slate-100 rounded-xl pl-6'>
                             <div className='grid content-center gap-2 h-[92px]'>
                                 <div className='text-sm text-slate-500'>Phone Number</div>
-                                <div className='font-bold'>+62 813-9387-7946</div>
+                                <div className='font-bold'>{user.phones}</div>
                             </div>
                             <div className='text-blue-500 mr-4 font-semibold'>Manage</div>
                         </div>

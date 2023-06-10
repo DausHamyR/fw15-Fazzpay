@@ -42,12 +42,25 @@ export const getServerSideProps = withIronSessionSsr(
 
 function Home({user,history}) {
     const [historyUser, setHistoryUser] = useState([])
+    
     useEffect(()=> {
-        async function getTransactions(){
-            setHistoryUser(history)
-        }
-        getTransactions()
+        setHistoryUser(history)
+        console.log
     }, [history])
+
+    const calculateTotalTopUp = () => {
+        let totalTopUp = 0;
+        let totalExpense = 0;
+        historyUser.forEach((item) => {
+            if (item.type === 'TOP-UP' || item.type === 'accept') {
+                totalTopUp += item.amount;
+            }else if (item.type === 'transfer') {
+                totalExpense += item.amount;
+            }
+        });
+        return {totalTopUp, totalExpense};
+    };
+    const { totalExpense, totalTopUp } = calculateTotalTopUp()
     
     return (
         <div className='bg-[#E5E5E5]'>
@@ -110,13 +123,12 @@ function Home({user,history}) {
                                 <div className='grid gap-2'>
                                     <AiOutlineArrowDown size={25} className='text-green-600'/>
                                     <div>Income</div>
-                                    {history.type = 'TOP-UP' && <div>{user.balance} </div>}
-                                    <div>{history.type = 'TOP-UP'}</div>
+                                    <div>Rp.{totalTopUp.toLocaleString('id-ID')}</div>
                                 </div>
                                 <div className='grid gap-2'>
                                     <AiOutlineArrowUp size={25} className='text-red-600'/>
                                     <div>Expense</div>
-                                    <div>Rp1.560.000</div>
+                                    <div>Rp.{totalExpense.toLocaleString('id-ID')}</div>
                                 </div>
                             </div>
                             <Image src={graphic} width={300} alt='graphic'/>

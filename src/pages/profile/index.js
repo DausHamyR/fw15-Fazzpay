@@ -35,10 +35,9 @@ export const getServerSideProps = withIronSessionSsr(
     cookieConfig
   );
 
-function Profile({token, user}) {
+function Profile({user}) {
     return (
         <div className='bg-[#E5E5E5]'>
-            {token}
             <div className='w-full bg-white h-24 flex justify-around items-center'>
                 <div className='text-blue-500 text-2xl font-bold'>FazzPay</div>
                 <div className='flex items-center gap-6'>
@@ -85,21 +84,21 @@ function Profile({token, user}) {
                         <div className='font-normal text-sm text-slate-400'>{user.phones}</div>
                     </div>
                     <div className='grid font-semibold'>
-                        <div className='flex justify-around items-center w-[433px] h-[64px] bg-slate-200 rounded-lg'>
+                        <Link href='/profile/personal-information' className='flex justify-around items-center w-[433px] h-[64px] bg-slate-200 rounded-lg'>
                             <div>Personal Information</div>
                             <AiOutlineArrowRight size={20}/>
-                        </div>
-                        <div className='flex justify-around items-center w-[433px] h-[64px] bg-slate-200 rounded-lg'>
+                        </Link>
+                        <Link href='/profile/change-password' className='flex justify-around items-center w-[433px] h-[64px] bg-slate-200 rounded-lg'>
                             <div>Change Password</div>
                             <AiOutlineArrowRight size={20}/>
-                        </div>
-                        <div className='flex justify-around items-center w-[433px] h-[64px] bg-slate-200 rounded-lg'>
+                        </Link>
+                        <Link href='/profile/change-pin' className='flex justify-around items-center w-[433px] h-[64px] bg-slate-200 rounded-lg'>
                             <div>Change Pin</div>
                             <AiOutlineArrowRight size={20}/>
-                        </div>
-                        <div className='flex justify-around items-center w-[433px] h-[64px] bg-slate-200 rounded-lg'>
+                        </Link>
+                        <Link href='/auth/logout' className='flex justify-around items-center w-[433px] h-[64px] bg-slate-200 rounded-lg'>
                             <div>Logout</div>
-                        </div>
+                        </Link>
                     </div>
                 </div>
             </div>

@@ -17,7 +17,7 @@ import Link from 'next/link'
 
 function LandingPage() {
     return (
-        <div>
+        <div className='h-screen'>
             <div className='w-full bg-white h-24 flex justify-around items-center'>
                 <div className='text-blue-500 text-2xl font-bold'>FazzPay</div>
                 <div className='flex items-center gap-6 z-10'>
@@ -29,7 +29,7 @@ function LandingPage() {
                 <div className='relative top-[100px] w-[400px] grid content-start gap-12'>
                     <div className='text-5xl font-bold leading-normal'>Awesome App For Saving <span className='text-blue-500'>Time.</span></div>
                     <div className=''>We bring you a mobile app for banking problems that oftenly wasting much of your times.</div>
-                    <button className='btn btn-primary text-white'>Try It Free</button>
+                    <Link href='/auth/register' className='btn btn-primary text-white'>Try It Free</Link>
                 </div>
                 <div>
                     <Image src={phone} alt='phone' className='relative z-10'/>

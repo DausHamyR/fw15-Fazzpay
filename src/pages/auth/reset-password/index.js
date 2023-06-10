@@ -7,11 +7,11 @@ import {AiOutlineEyeInvisible} from 'react-icons/ai';
 import Link from 'next/link'
 import Head from 'next/head';
 
-function ResetPassword() {
+function CreateNewPassword() {
     return (
         <>
         <Head>
-            <title>Page Reset Password</title>
+            <title>Page Create New Password</title>
         </Head>
         <div className='flex'>
             <div className='w-[55%] h-screen bg-[#6379F4] relative'>
@@ -32,17 +32,26 @@ function ResetPassword() {
                     <div className='w-[90%] font-bold text-2xl leading-relaxed'>Did You Forgot Your Password?
 Don’t Worry, You Can Reset Your
 Password In a Minutes.</div>
-                    <div className='w-[433px] text-slate-400 leading-8 text-base'>To reset your password, you must type your e-mail and we will send a link to your email and you will be directed to the reset password screens.</div>
+                    <div className='w-[433px] text-slate-400 leading-8 text-base'>Now you can create a new password for your FazzPay account. Type your password twice so we can confirm your new passsword.</div>
                     <div className='grid gap-12 relative top-8'>
                         <div className='grid gap-1'>
                             <div className='flex gap-4'>
-                                <Image src={mail} alt='mail' />
-                                <input type='email' placeholder='Enter your e-mail' className='border-none pl-4 tracking-wider w-full border-slate-400'/>
+                                <Image src={lock} alt='mail' />
+                                <input type='email' placeholder='Create new password' className='border-none pl-4 tracking-wider w-full border-slate-400'/>
+                                <AiOutlineEyeInvisible size={25}/>
+                            </div>
+                            <hr className='h-0.5 bg-slate-300' />
+                        </div>
+                        <div className='grid gap-1'>
+                            <div className='flex gap-4'>
+                                <Image src={lock} alt='lock' />
+                                <input type='password' placeholder='Confirm new password' className='border-none pl-4 tracking-wider w-full border-slate-400'/>
+                                <AiOutlineEyeInvisible size={25}/>
                             </div>
                             <hr className='h-0.5 bg-slate-300' />
                         </div>
                         <div className='grid gap-4'>
-                            <button className='btn btn-primary w-full tracking-wider'>Confirm</button>
+                            <button className='btn btn-primary w-full tracking-wider'>Reset Password</button>
                         </div>
                     </div>
                 </div>
@@ -52,4 +61,4 @@ Password In a Minutes.</div>
     )
 }
 
-export default ResetPassword
+export default CreateNewPassword
