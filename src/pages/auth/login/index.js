@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Image from 'next/image';
 import mail from '../../../../public/mail.png';
 import lock from '../../../../public/lock.png';
@@ -6,29 +6,51 @@ import phone from '../../../../public/Group 57.png';
 import {AiOutlineEyeInvisible} from 'react-icons/ai';
 import Link from 'next/link'
 import Head from 'next/head';
+import {useRouter} from 'next/router';
 import { withIronSessionSsr } from "iron-session/next";
 import cookieConfig from '@/helpers/cookieConfig';
+import axios from 'axios';
 
 export const getServerSideProps = withIronSessionSsr(
-    async function getServerSideProps({ req }) {
-      const token = req.session.token;
+    async function getServerSideProps({ req, res }) {
+      const token = req.session?.token;
   
-      if (!token) {
+      if (token) {
+        res.setHeader('location', '/home')
+        res.statusCode = 302
+        res.end()
         return {
-          notFound: true,
+            props: {
+                token
+            }
         };
       }
   
       return {
-        props: {
-          token: req.session.token,
-        },
+        props: {},
       };
     },
     cookieConfig
   );
 
 function Login() {
+    const [loading, setLoading] = useState(false)
+    const router = useRouter()
+    const doLogin = async(e)=> {
+        setLoading(true)
+        e.preventDefault()
+        const {value: email} = e.target.email
+        const {value: password} = e.target.password
+        const form = new URLSearchParams({
+            email, password
+        })
+        const {data} = await axios.post('/api/login', form.toString())
+        setLoading(false)
+        if(data?.results?.token){
+            router.push('/home')
+        }
+    }
+
     return (
         <>
         <Head>
@@ -54,28 +76,31 @@ function Login() {
     With All Devices and All Platforms
     With 30.000+ Users</div>
                     <div className='w-[433px] text-slate-400 leading-8 text-base'>Transfering money is eassier than ever, you can access FazzPay wherever you are. Desktop, laptop, mobile phone? we cover all of that for you!</div>
-                    <div className='grid gap-12 relative top-8'>
+                    <form onSubmit={doLogin} className='grid gap-12 relative top-8'>
                         <div className='grid gap-1'>
                             <div className='flex gap-4'>
                                 <Image src={mail} alt='mail' />
-                                <input type='email' placeholder='Enter your e-mail' className='border-none pl-4 tracking-wider w-full border-slate-400'/>
+                                <input name='email' type='email' placeholder='Enter your e-mail' className='border-none pl-4 tracking-wider w-full border-slate-400'/>
                             </div>
                             <hr className='h-0.5 bg-slate-300' />
                         </div>
                         <div className='grid gap-1'>
                             <div className='flex gap-4'>
                                 <Image src={lock} alt='lock' />
-                                <input type='password' placeholder='Enter your password' className='border-none pl-4 tracking-wider w-full border-slate-400'/>
+                                <input name='password' type='password' placeholder='Enter your password' className='border-none pl-4 tracking-wider w-full border-slate-400'/>
                                 <AiOutlineEyeInvisible size={25}/>
                             </div>
                             <hr className='h-0.5 bg-slate-300' />
                             <Link href='/auth/reset-password' className='place-self-end top-2 relative font-semibold text-slate-500'>Forgot Password</Link>
                         </div>
                         <div className='grid gap-4'>
-                            <button className='btn btn-primary w-full tracking-wider'>Login</button>
+                            <button disabled={loading} className='btn btn-primary w-full tracking-wider'>
+                                {loading && <span className='loading loading-spinner loading-sm'></span>}
+                                {!loading && 'Login'}
+                            </button>
                             <div className='place-self-center tracking-wider text-slate-500'>Don’t have an account? Let’s <Link href='/auth/register' className='text-blue-500 font-semibold'> Sign Up</Link></div>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>

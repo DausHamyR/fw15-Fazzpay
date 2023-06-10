@@ -21,8 +21,8 @@ function LandingPage() {
             <div className='w-full bg-white h-24 flex justify-around items-center'>
                 <div className='text-blue-500 text-2xl font-bold'>FazzPay</div>
                 <div className='flex items-center gap-6 z-10'>
-                    <Link href='/login' className='btn btn-primary text-white border-white'>Login</Link>
-                    <Link href='/register' className='btn'>Sign Up</Link>
+                    <Link href='/auth/login' className='btn btn-primary text-white border-white'>Login</Link>
+                    <Link href='/auth/register' className='btn'>Sign Up</Link>
                 </div>
             </div>
             <div className='flex justify-around'>

@@ -2,10 +2,6 @@ import React from 'react'
 import Image from 'next/image';
 import {FiBell} from 'react-icons/fi'
 import logout from '../../../public/log-out.png';
-import plusTransfer from '../../../public/Group 33.png';
-import topUp from '../../../public/Group 34.png';
-import avatar from '../../../public/Rectangle 25.png';
-import graphic from '../../../public/graphic.png';
 import grid from '../../../public/grid.svg';
 import {AiOutlineUser} from 'react-icons/ai';
 import {AiOutlinePlus} from 'react-icons/ai';
@@ -13,17 +9,43 @@ import {AiOutlineArrowUp} from 'react-icons/ai';
 import {AiOutlineArrowRight} from 'react-icons/ai';
 import {AiOutlineEdit} from 'react-icons/ai';
 import Link from 'next/link'
+import cookieConfig from '@/helpers/cookieConfig';
+import { withIronSessionSsr } from "iron-session/next";
+import axios from 'axios';
+import checkCredentials from '@/helpers/checkCredentials';
 
-function Profile() {
+export const getServerSideProps = withIronSessionSsr(
+    async function getServerSideProps({ req, res }) {
+        const token = req.session?.token
+        checkCredentials(token, res, '/auth/login')
+
+      const {data} = await axios.get('https://cute-lime-goldfish-toga.cyclic.app/profile', {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+      })
+  
+      return {
+        props: {
+          token,
+          user: data.results
+        },
+      };
+    },
+    cookieConfig
+  );
+
+function Profile({token, user}) {
     return (
         <div className='bg-[#E5E5E5]'>
+            {token}
             <div className='w-full bg-white h-24 flex justify-around items-center'>
                 <div className='text-blue-500 text-2xl font-bold'>FazzPay</div>
                 <div className='flex items-center gap-6'>
-                    <Image src={avatar} alt='avatar'/>
+                    <Image src={user.picture} width={50} height={50} className='rounded-xl' alt='avatar'/>
                     <div className='grid'>
-                        <div>Robert Chandler</div>
-                        <div>+62 8139 3877 7946</div>
+                        <div>{user.fullName}</div>
+                        <div>{user.phones}</div>
                     </div>
                     <FiBell size={25}/>
                 </div>
@@ -48,19 +70,19 @@ function Profile() {
                             <Link href='/profile'>Profile</Link>
                         </div>
                     </div>
-                    <div className='flex gap-2 items-center font-semibold'>
+                    <Link href='/auth/logout' className='flex gap-2 items-center font-semibold'>
                         <Image src={logout} alt='logout'/>Logout
-                    </div>
+                    </Link>
                 </div>
                 <div className='w-[950px] h-[678px] bg-white relative top-12 rounded-xl grid justify-items-center gap-16'>
                     <div className='grid justify-items-center content-start gap-2 relative top-24'>
-                        <Image src={avatar} alt='user'/>
+                        <Image src={user.picture} width={50} height={50} className='rounded-xl' alt='user'/>
                         <div className='flex gap-2 items-center'>
                             <AiOutlineEdit />
                             <div className='text-xs'>Edit</div>
                         </div>
-                        <div className='font-bold text-xl'>Robert Chandler</div>
-                        <div className='font-normal text-sm text-slate-400'>+62 813-9387-7946</div>
+                        <div className='font-bold text-xl'>{user.fullName}</div>
+                        <div className='font-normal text-sm text-slate-400'>{user.phones}</div>
                     </div>
                     <div className='grid font-semibold'>
                         <div className='flex justify-around items-center w-[433px] h-[64px] bg-slate-200 rounded-lg'>
