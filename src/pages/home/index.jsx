@@ -45,7 +45,6 @@ function Home({user,history}) {
     
     useEffect(()=> {
         setHistoryUser(history)
-        console.log
     }, [history])
 
     const calculateTotalTopUp = () => {
@@ -150,7 +149,7 @@ function Home({user,history}) {
                                         </div>
                                     </div>
                                     <div>
-                                        <div className='text-green-500 relative top-12 right-[-100px] font-bold'>{historyTransaksi.amount}</div>
+                                        <div className={`relative top-12 right-[-100px] font-bold ${historyTransaksi.type === 'TOP-UP' ? 'text-green-500' : 'text-red-500'}`}>{historyTransaksi.amount}</div>
                                     </div>
                                 </div>
                                     )

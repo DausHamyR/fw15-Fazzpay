@@ -1,29 +1,60 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import Image from 'next/image';
 import {FiBell} from 'react-icons/fi'
 import logout from '../../../public/log-out.png';
-import plusTransfer from '../../../public/Group 33.png';
-import topUp from '../../../public/Group 34.png';
 import avatar from '../../../public/Rectangle 25.png';
-import graphic from '../../../public/graphic.png';
 import grid from '../../../public/grid.svg';
 import {AiOutlineUser} from 'react-icons/ai';
 import {AiOutlinePlus} from 'react-icons/ai';
 import {AiOutlineArrowUp} from 'react-icons/ai';
-import {AiOutlineArrowDown} from 'react-icons/ai';
 import {AiOutlineSearch} from 'react-icons/ai';
 import Link from 'next/link'
+import { withIronSessionSsr } from "iron-session/next";
+import axios from 'axios';
+import checkCredentials from '@/helpers/checkCredentials';
+import cookieConfig from '@/helpers/cookieConfig';
 
-function Transfer() {
+export const getServerSideProps = withIronSessionSsr(
+    async function getServerSideProps({ req, res }) {
+        const token = req.session?.token
+        checkCredentials(token, res, '/auth/login')
+        const {data} = await axios.get('https://cute-lime-goldfish-toga.cyclic.app/profile', {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+        const {data: dataHistoryTransactions} = await axios.get('https://cute-lime-goldfish-toga.cyclic.app/transactions', {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+        return {
+            props: {
+                token,
+                user: data.results,
+                history: dataHistoryTransactions.results
+            },
+        };
+    },
+    cookieConfig
+);
+
+function Transfer({user, history}) {
+    const [historyUser, setHistoryUser] = useState([])
+    
+    useEffect(()=> {
+        setHistoryUser(history)
+    }, [history])
+
     return (
         <div className='bg-[#E5E5E5]'>
             <div className='w-full bg-white h-24 flex justify-around items-center'>
                 <div className='text-blue-500 text-2xl font-bold'>FazzPay</div>
                 <div className='flex items-center gap-6'>
-                    <Image src={avatar} alt='avatar'/>
+                    <Image className='rounded-xl' src={user.picture} width={50} height={50} alt='avatar'/>
                     <div className='grid'>
-                        <div>Robert Chandler</div>
-                        <div>+62 8139 3877 7946</div>
+                        <div>{user.fullName}</div>
+                        <div>{user.phones}</div>
                     </div>
                     <FiBell size={25}/>
                 </div>
@@ -48,9 +79,9 @@ function Transfer() {
                             <Link href='/profile'>Profile</Link>
                         </div>
                     </div>
-                    <div className='flex gap-2 items-center font-semibold'>
+                    <Link href='/auth/logout' className='flex gap-2 items-center font-semibold'>
                         <Image src={logout} alt='logout'/>Logout
-                    </div>
+                    </Link>
                 </div>
                 <div className='w-[950px] h-[678px] bg-white relative top-12 rounded-xl'>
                     <div className='w-[850px]'>
@@ -60,7 +91,20 @@ function Transfer() {
                             <AiOutlineSearch size={30} className='relative top-[-55px] left-4 text-slate-400'/>
                         </div>
                         <div className='grid gap-12 relative top-12 left-12'>
-                            <div className='flex justify-start items-center'>
+                            {historyUser.map(historyUser => {
+                                return (
+                            <div key={`transaksi-${historyUser.id}`} className='flex justify-start items-center'>
+                                <div className='flex relative top-12 left-4 gap-4 drop-shadow-lg rounded-lg bg-white w-full'>
+                                    <Image src={historyUser.picture} alt='avatar' />
+                                    <div className='grid gap-2'>
+                                        <div className='font-bold'>{historyUser.fullName}</div>
+                                        <div className='text-sm'>{historyUser.username}</div>
+                                    </div>
+                                </div>
+                            </div>
+                                )
+                            })}
+                            {/* <div className='flex justify-start items-center'>
                                 <div className='flex relative top-12 left-4 gap-4 drop-shadow-lg rounded-lg bg-white w-full'>
                                     <Image src={avatar} alt='avatar' />
                                     <div className='grid gap-2'>
@@ -86,16 +130,7 @@ function Transfer() {
                                         <div className='text-sm'>+62 813-8492-9994</div>
                                     </div>
                                 </div>
-                            </div>
-                            <div className='flex justify-start items-center'>
-                                <div className='flex relative top-12 left-4 gap-4 drop-shadow-lg rounded-lg bg-white w-full'>
-                                    <Image src={avatar} alt='avatar' />
-                                    <div className='grid gap-2'>
-                                        <div className='font-bold'>Samuel Suhi</div>
-                                        <div className='text-sm'>+62 813-8492-9994</div>
-                                    </div>
-                                </div>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 </div>
