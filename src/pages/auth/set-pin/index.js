@@ -1,14 +1,24 @@
 import React from 'react'
-import Image from 'next/image';
-import mail from '../../../../public/mail.png';
-import lock from '../../../../public/lock.png';
-import phone from '../../../../public/Group 57.png';
-import {AiOutlineEyeInvisible} from 'react-icons/ai';
-import {AiOutlineUser} from 'react-icons/ai';
-import Link from 'next/link'
-import Head from 'next/head';
+import Image from 'next/image'
+import phone from '../../../../public/Group 57.png'
+import Head from 'next/head'
+import { useRouter } from 'next/router'
+import http from '@/helpers/http.helper'
+import PinInput from '@/components/PinInput'
 
-function CreatePin() {
+function CreatePin({email}) {
+    const router = useRouter()
+    const [pin, setPin] = React.useState('')
+    
+
+    const submitPin = async(event)=> {
+        event.preventDefault()
+        const pinValue = pin.toString()
+        const body = new URLSearchParams({pin: pinValue}).toString()
+        const {data} = await http().post('/auth/set-pin', body)
+        router.push('/auth/login')
+    }
+
     return (
         <>
         <Head>
@@ -34,19 +44,7 @@ function CreatePin() {
 and Your Data With 6 Digits PIN
 That You Created Yourself.</div>
                     <div className='w-[433px] text-slate-400 leading-8 text-base'>Create 6 digits pin to secure all your money and your data in FazzPay app. Keep it secret and don’t tell anyone about your FazzPay account password and the PIN.</div>
-                    <div className='grid gap-10 relative top-4'>
-                        <div className='flex gap-6'>
-                            <div className='w-[53px] h-[65px] bg-white border-2 rounded-xl'></div>
-                            <div className='w-[53px] h-[65px] bg-white border-2 rounded-xl'></div>
-                            <div className='w-[53px] h-[65px] bg-white border-2 rounded-xl'></div>
-                            <div className='w-[53px] h-[65px] bg-white border-2 rounded-xl'></div>
-                            <div className='w-[53px] h-[65px] bg-white border-2 rounded-xl'></div>
-                            <div className='w-[53px] h-[65px] bg-white border-2 rounded-xl'></div>
-                        </div>
-                        <div className='grid gap-4'>
-                            <button className='btn btn-primary w-full tracking-wider'>Confirm</button>
-                        </div>
-                    </div>
+                    <PinInput onChangePin={}/>
                 </div>
             </div>
         </div>

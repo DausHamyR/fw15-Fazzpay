@@ -3,41 +3,38 @@ import Image from 'next/image';
 import mail from '../../../../public/mail.png';
 import lock from '../../../../public/lock.png';
 import phone from '../../../../public/Group 57.png';
-import {AiOutlineEyeInvisible} from 'react-icons/ai';
+import {AiOutlineEyeInvisible, AiOutlineEye} from 'react-icons/ai';
 import {AiOutlineUser} from 'react-icons/ai';
 import Link from 'next/link'
 import Head from 'next/head';
 import {useRouter} from 'next/router';
-import axios from 'axios';
+import http from '@/helpers/http.helper';
+import { saveEmail } from '@/redux/reducers/auth';
+import { useDispatch } from 'react-redux';
 
 function Register() {
+    const dispatch = useDispatch()
     const router = useRouter()
     const [errorMessage, setErrorMessage] = React.useState('')
     const [successMessage, setSuccessMessage] = React.useState('')
-    // const [showPassword, setShowPassword] = React.useState(false)
-    // const [showConfirmPassword, setShowConfirmPassword] = React.useState(false)
+    const [showPassword, setShowPassword] = React.useState(false)
+    const [loading, setLoading] = React.useState(false)
 
-    // const handleTogglePassword = () => {
-    //     setShowPassword((prevState) => !prevState)
-    // }
-    // const handleToggleConfirmPassword = () => {
-    //     setShowConfirmPassword((prevState) => !prevState)
-    // }
+    const handleTogglePassword = () => {
+        setShowPassword(!showPassword)
+    }
+
     const doRegister = async (event) => {
         try{
+            setLoading(true)
             event.preventDefault()
-            const {value: firstname} = event.target.firstname
-            const {value: lastname} = event.target.lastname
+            const {value: username} = event.target.username
             const {value: email} = event.target.email
             const {value: password} = event.target.password
             setSuccessMessage('')
             
-            if(!firstname || firstname.length < 3){
-                setErrorMessage('firstname must be at least 3 characters long')
-                return
-            }
-            if(!lastname || !lastname.length < 3){
-                setErrorMessage('lastname must be at least 3 characters long')
+            if(!username || username.length < 6){
+                setErrorMessage('username must be at least 6 characters long')
                 return
             }
             if(!email || !email.includes('@')){
@@ -49,13 +46,20 @@ function Register() {
                 setErrorMessage('Password must contain at least 8 characters, including 1 uppercase letter, 1 lowercase letter, 1 number, and 1 symbol')
                 return
             }
-            const body = new URLSearchParams({firstname, lastname, email, password}).toString()
-            const {data} = await axios.post('https://cute-lime-goldfish-toga.cyclic.app/auth/register', body)
+            const body = new URLSearchParams({username, email, password}).toString()
+            const {data} = await http().post('/auth/register', body)
+            dispatch(saveEmail(email))
             setSuccessMessage(data.message)
-            router.push('/auth/login')
+            router.push('/auth/set-pin')
             setErrorMessage('')
         }catch(err){
-            console.log(err)
+            const message = err?.response?.data?.message
+            if(message){
+                setErrorMessage(message)
+            }
+            setSuccessMessage('')
+        }finally{
+            setLoading(false)
         }
     }
 
@@ -98,14 +102,7 @@ function Register() {
                         <div className='grid gap-1'>
                             <div className='flex gap-4'>
                                 <AiOutlineUser size={20} className='text-slate-400'/>
-                                <input name='firstname' type='text' placeholder='Enter your firstname' className='border-none pl-4 tracking-wider w-full border-slate-400'/>
-                            </div>
-                            <hr className='h-0.5 bg-slate-300' />
-                        </div>
-                        <div className='grid gap-1'>
-                            <div className='flex gap-4'>
-                                <AiOutlineUser size={20} className='text-slate-400'/>
-                                <input name='lastname' type='text' placeholder='Enter your lastname' className='border-none pl-4 tracking-wider w-full border-slate-400'/>
+                                <input name='username' type='text' placeholder='Enter your username' className='border-none pl-4 tracking-wider w-full border-slate-400'/>
                             </div>
                             <hr className='h-0.5 bg-slate-300' />
                         </div>
@@ -119,13 +116,18 @@ function Register() {
                         <div className='grid gap-1'>
                             <div className='flex gap-4'>
                                 <Image src={lock} alt='lock' />
-                                <input name='password' type='password' placeholder='Create your password' className='border-none pl-4 tracking-wider w-full border-slate-400'/>
-                                <AiOutlineEyeInvisible size={25}/>
+                                <input name='password' type={showPassword ? 'text' : 'password'} placeholder='Create your password' className='border-none pl-4 tracking-wider w-full border-slate-400'/>
+                                <div onClick={handleTogglePassword}>
+                                    {showPassword ?
+                                        <AiOutlineEye size={25} /> :
+                                        <AiOutlineEyeInvisible size={25}/>
+                                    }
+                                </div>
                             </div>
                             <hr className='h-0.5 bg-slate-300' />
                         </div>
                         <div className='grid gap-4'>
-                            <button className='btn btn-primary w-full tracking-wider'>Sign Up</button>
+                            <button disabled={loading} type='submit' className='btn btn-primary w-full tracking-wider'>Sign Up</button>
                             <div className='place-self-center tracking-wider text-slate-500'>Already have an account?<Link href='/auth/login' className='text-blue-500 font-semibold'> Let’s Login</Link></div>
                         </div>
                     </form>

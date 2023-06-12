@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react'
 import Image from 'next/image';
 import {FiBell} from 'react-icons/fi'
 import logout from '../../../public/log-out.png';
-import avatar from '../../../public/Rectangle 25.png';
 import grid from '../../../public/grid.svg';
 import {AiOutlineUser} from 'react-icons/ai';
 import {AiOutlinePlus} from 'react-icons/ai';
@@ -90,18 +89,18 @@ function Transfer({user, history}) {
                             <input type="text" placeholder="Search receiver here" class="input input-bordered w-full bg-slate-200 pl-16" />
                             <AiOutlineSearch size={30} className='relative top-[-55px] left-4 text-slate-400'/>
                         </div>
-                        <div className='grid gap-12 relative top-12 left-12'>
+                        <div className='grid gap-12 relative top-[100px] left-12'>
                             {historyUser.map(historyUser => {
                                 return (
-                            <div key={`transaksi-${historyUser.id}`} className='flex justify-start items-center'>
-                                <div className='flex relative top-12 left-4 gap-4 drop-shadow-lg rounded-lg bg-white w-full'>
-                                    <Image src={historyUser.picture} alt='avatar' />
+                            <Link href={`/transfer/transfer-user/${historyUser.id}`} key={`transaksi-${historyUser.id}`} className='grid grid-col justify-items-start content-between'>
+                                <div className='flex gap-4 drop-shadow-lg rounded-lg bg-white w-full'>
+                                    <Image src={historyUser.recipient.picture} className='rounded-xl' width={50} height={50} alt='avatar' />
                                     <div className='grid gap-2'>
-                                        <div className='font-bold'>{historyUser.fullName}</div>
-                                        <div className='text-sm'>{historyUser.username}</div>
+                                        <div className='font-bold'>{historyUser.recipient.fullName}</div>
+                                        <div className='text-sm'>{historyUser.recipient.username}</div>
                                     </div>
                                 </div>
-                            </div>
+                            </Link>
                                 )
                             })}
                             {/* <div className='flex justify-start items-center'>

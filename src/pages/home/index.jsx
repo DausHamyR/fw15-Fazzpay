@@ -11,29 +11,21 @@ import {AiOutlineArrowDown} from 'react-icons/ai';
 import Link from 'next/link'
 import cookieConfig from '@/helpers/cookieConfig';
 import { withIronSessionSsr } from "iron-session/next";
-import axios from 'axios';
 import checkCredentials from '@/helpers/checkCredentials';
+import http from '@/helpers/http.helper';
 // import Navbar from '@/components/Navbar';
 
 export const getServerSideProps = withIronSessionSsr(
     async function getServerSideProps({ req, res }) {
         const token = req.session?.token
         checkCredentials(token, res, '/auth/login')
-        const {data} = await axios.get('https://cute-lime-goldfish-toga.cyclic.app/profile', {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-        const {data: dataHistoryTransactions} = await axios.get('https://cute-lime-goldfish-toga.cyclic.app/transactions', {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
+        const {data} = await http(token).get('/profile')
+        const {data: historyTransactions} = await http(token).get('/transactions')
         return {
             props: {
                 token,
                 user: data.results,
-                history: dataHistoryTransactions.results
+                history: historyTransactions.results
             },
         };
     },
@@ -42,7 +34,6 @@ export const getServerSideProps = withIronSessionSsr(
 
 function Home({user,history}) {
     const [historyUser, setHistoryUser] = useState([])
-    
     useEffect(()=> {
         setHistoryUser(history)
     }, [history])
@@ -140,56 +131,20 @@ function Home({user,history}) {
                             <div className='grid gap-8'>
                                 {historyUser.map(historyTransaksi => {
                                     return (
-                                <div key={`history-${historyTransaksi.id}`} className='flex'>
+                                <Link href={`/history/status/${historyTransaksi.id}`} key={`history-${historyTransaksi.id}`} className='flex'>
                                     <div className='flex relative top-12 left-4 gap-4'>
-                                        <Image src={historyTransaksi.picture} width={50} height={50} alt='avatar' />
+                                        <Image src={historyTransaksi.recipient.picture} className='rounded-xl' width={50} height={50} alt='avatar' />
                                         <div className='grid gap-2'>
-                                            <div className='font-bold'>{historyTransaksi.fullName}</div>
+                                            <div className='font-bold'>{historyTransaksi.recipient.fullName}</div>
                                             <div className='text-sm'>{historyTransaksi.type}</div>
                                         </div>
                                     </div>
                                     <div>
-                                        <div className={`relative top-12 right-[-100px] font-bold ${historyTransaksi.type === 'TOP-UP' ? 'text-green-500' : 'text-red-500'}`}>{historyTransaksi.amount}</div>
+                                        <div className={`relative top-12 right-[-100px] font-bold ${historyTransaksi.type === 'TOP-UP' ? 'text-green-500' : 'text-red-500'}`}>Rp.{historyTransaksi.amount.toLocaleString('id-ID')}</div>
                                     </div>
-                                </div>
+                                </Link>
                                     )
                                 })}
-                                {/* <div className='flex'>
-                                    <div className='flex relative top-12 left-4 gap-4'>
-                                        <Image src={avatar} alt='avatar' />
-                                        <div className='grid gap-2'>
-                                            <div className='font-bold'>Samuel Suhi</div>
-                                            <div className='text-sm'>Accept</div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div className='text-red-500 relative top-12 right-[-100px] font-bold'>-Rp149.000</div>
-                                    </div>
-                                </div>
-                                <div className='flex'>
-                                    <div className='flex relative top-12 left-4 gap-4'>
-                                        <Image src={avatar} alt='avatar' />
-                                        <div className='grid gap-2'>
-                                            <div className='font-bold'>Samuel Suhi</div>
-                                            <div className='text-sm'>Accept</div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div className='text-green-500 relative top-12 right-[-100px] font-bold'>+Rp150.000</div>
-                                    </div>
-                                </div>
-                                <div className='flex'>
-                                    <div className='flex relative top-12 left-4 gap-4'>
-                                        <Image src={avatar} alt='avatar' />
-                                        <div className='grid gap-2'>
-                                            <div className='font-bold'>Samuel Suhi</div>
-                                            <div className='text-sm'>Accept</div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div className='text-red-500 relative top-12 right-[-100px] font-bold'>-Rp249.000</div>
-                                    </div>
-                                </div> */}
                             </div>
                         </div>
                     </div>

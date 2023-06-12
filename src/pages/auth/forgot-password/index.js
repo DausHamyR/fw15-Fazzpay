@@ -4,29 +4,7 @@ import mail from '../../../../public/mail.png';
 import phone from '../../../../public/Group 57.png';
 import Head from 'next/head';
 import {useRouter} from 'next/router';
-import axios from 'axios';
-
-// export const getServerSideProps = withIronSessionSsr(
-//     async function getServerSideProps({ req, res }) {
-//       const token = req.session?.token;
-  
-//       if (token) {
-//         res.setHeader('location', '/home')
-//         res.statusCode = 302
-//         res.end()
-//         return {
-//             props: {
-//                 token
-//             }
-//         };
-//       }
-  
-//       return {
-//         props: {},
-//       };
-//     },
-//     cookieConfig
-//   );
+import http from '@/helpers/http.helper';
 
 function ResetPassword() {
     const router = useRouter()
@@ -37,14 +15,11 @@ function ResetPassword() {
         try{
             event.preventDefault()
             const {value: email} = event.target.email
-            console.log(email)
             const body = new URLSearchParams({email}).toString()
-            console.log(body)
-            const {data} = await axios.post('/auth/forgot-password', body)
-            console.log(data)
+            const {data} = await http().post('/auth/forgot-password', body)
             if(data){
                 setSuccessMessage("Success, the code was sent to the email")
-                // router.push('/auth/create-new-password')
+                router.push('/auth/reset-password')
             }
         }catch(err){
             if(err){

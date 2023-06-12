@@ -47,18 +47,24 @@ function Login() {
             setSuccessMessage('')
             const form = new URLSearchParams({
                 email, password
-            })
-            const {data} = await axios.post('/api/login', form.toString())
-            setSuccessMessage(data.message)
-            setErrorMessage('')
-            setLoading(false)
-            if(data?.results?.token){
+            }).toString()
+            const {data} = await axios.post('/api/login', form)
+            if(data.success === true){
                 router.push('/home')
+                setSuccessMessage(data.message)
+                setLoading(false)
+                setErrorMessage('')
             }
+            if(data.success === false){
+                setErrorMessage(data.message)
+                setLoading(false)
+            }
+            setLoading(false)
         }catch(err){
             const message = err?.response?.data?.message
             if(message){
                 setErrorMessage(message)
+                setLoading(false)
             }
             setSuccessMessage('')
         }
@@ -96,12 +102,12 @@ function Login() {
                     <div className='w-[433px] text-slate-400 leading-8 text-base'>Transfering money is eassier than ever, you can access FazzPay wherever you are. Desktop, laptop, mobile phone? we cover all of that for you!</div>
                     {errorMessage && (
                     <div>
-                        <h1 className="alert alert-error mt-4 w-[330px]">{errorMessage}</h1>
+                        <h1 className="alert alert-error w-[330px]">{errorMessage}</h1>
                     </div>
                     )}
                     {successMessage && (
                     <div>
-                        <h1 className="alert alert-success mt-4 w-[330px]">{successMessage}</h1>
+                        <h1 className="alert alert-success w-[330px]">{successMessage}</h1>
                     </div>
                     )}
                     <form onSubmit={doLogin} className='grid gap-12 relative top-8'>

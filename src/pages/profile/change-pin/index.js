@@ -1,29 +1,45 @@
 import React from 'react'
 import Image from 'next/image';
 import {FiBell} from 'react-icons/fi'
-import logout from '../../../public/log-out.png';
-import plusTransfer from '../../../public/Group 33.png';
-import topUp from '../../../public/Group 34.png';
-import avatar from '../../../public/Rectangle 25.png';
-import graphic from '../../../public/graphic.png';
-import grid from '../../../public/grid.svg';
+import logout from '../../../../public/log-out.png';
+import avatar from '../../../../public/Rectangle 25.png';
+import grid from '../../../../public/grid.svg';
 import {AiOutlineUser} from 'react-icons/ai';
 import {AiOutlinePlus} from 'react-icons/ai';
 import {AiOutlineArrowUp} from 'react-icons/ai';
 import {HiOutlineLockClosed} from 'react-icons/hi';
 import {AiOutlineEyeInvisible} from 'react-icons/ai';
 import Link from 'next/link'
+import cookieConfig from '@/helpers/cookieConfig';
+import { withIronSessionSsr } from "iron-session/next";
+import checkCredentials from '@/helpers/checkCredentials';
+import http from '@/helpers/http.helper';
 
-function ChangePin() {
+export const getServerSideProps = withIronSessionSsr(
+    async function getServerSideProps({ req, res }) {
+        const token = req.session?.token
+        checkCredentials(token, res, '/auth/login')
+        const {data} = await http(token).get('/profile')
+        return {
+            props: {
+                token,
+                user: data.results,
+            },
+        };
+    },
+    cookieConfig
+);
+
+function ChangePin({user}) {
     return (
         <div className='bg-[#E5E5E5]'>
             <div className='w-full bg-white h-24 flex justify-around items-center'>
                 <div className='text-blue-500 text-2xl font-bold'>FazzPay</div>
                 <div className='flex items-center gap-6'>
-                    <Image src={avatar} alt='avatar'/>
+                    <Image src={user.picture} className='rounded-xl' width={50} height={50} alt='avatar'/>
                     <div className='grid'>
-                        <div>Robert Chandler</div>
-                        <div>+62 8139 3877 7946</div>
+                        <div>{user.fullName}</div>
+                        <div>{user.phones}</div>
                     </div>
                     <FiBell size={25}/>
                 </div>
@@ -48,9 +64,9 @@ function ChangePin() {
                             <Link href='/profile'>Profile</Link>
                         </div>
                     </div>
-                    <div className='flex gap-2 items-center font-semibold'>
+                    <Link href='/auth/logout' className='flex gap-2 items-center font-semibold'>
                         <Image src={logout} alt='logout'/>Logout
-                    </div>
+                    </Link>
                 </div>
                 <div className='w-[950px] h-[678px] bg-white relative top-12 rounded-xl'>
                     <div className='relative left-12 top-8 grid gap-6'>

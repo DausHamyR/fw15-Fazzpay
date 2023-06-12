@@ -49,7 +49,7 @@ function History({user, history}) {
             <div className='w-full bg-white h-24 flex justify-around items-center'>
                 <div className='text-blue-500 text-2xl font-bold'>FazzPay</div>
                 <div className='flex items-center gap-6'>
-                    <Image src={user.picture} width={50} height={50} alt='avatar'/>
+                    <Image src={user.picture} className='rounded-xl' width={50} height={50} alt='avatar'/>
                     <div className='grid'>
                         <div>{user.fullName}</div>
                         <div>{user.phones}</div>
@@ -60,10 +60,10 @@ function History({user, history}) {
             <div className='flex justify-center gap-8'>
                 <div className='w-[270px] h-[678px] grid content-around justify-items-center bg-white relative top-12 rounded-xl'>
                     <div className='relative grid gap-12 top-12 font-semibold'>
-                        <div className='flex gap-2 items-center'>
+                        <Link href='/home' className='flex gap-2 items-center'>
                             <Image src={grid} alt='grid' />
                             <div className='text-blue-500'>Dashboard</div>
-                        </div>
+                        </Link>
                         <div className='flex gap-2 items-center'>
                             <AiOutlineArrowUp />
                             <Link href='/transfer'>Transfer</Link>
@@ -89,18 +89,18 @@ function History({user, history}) {
                     <div className='grid gap-8'>
                         {historyUser.map(historyUser => {
                             return (
-                        <div key={`history-${historyUser.id}`} className='flex justify-around items-center'>
+                        <Link href={`/history/status/${historyUser.id}`} key={`history-${historyUser.id}`} className='flex justify-around items-center'>
                             <div className='flex relative top-12 left-4 gap-4'>
-                                <Image src={historyUser.picture} alt='avatar' />
+                                <Image src={historyUser.recipient.picture} className='rounded-xl' width={50} height={50} alt='avatar' />
                                 <div className='grid gap-2'>
-                                    <div className='font-bold'>{historyUser.fullName}</div>
+                                    <div className='font-bold'>{historyUser.recipient.fullName}</div>
                                     <div className='text-sm'>{historyUser.type}</div>
                                 </div>
                             </div>
                             <div>
-                                <div className={`relative top-12 font-bold ${historyUser.type === 'TOP-UP' ? 'text-green-500' : 'text-red-500'}`}>{historyUser.amount}</div>
+                                <div className={`relative top-12 font-bold ${historyUser.type === 'TOP-UP' ? 'text-green-500' : 'text-red-500'}`}>Rp.{historyUser.amount.toLocaleString('id-ID')}</div>
                             </div>
-                        </div>
+                        </Link>
                             )
                         })}
                         {/* <div className='flex justify-around items-center'>

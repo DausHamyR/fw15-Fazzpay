@@ -3,16 +3,14 @@ import Image from 'next/image';
 import {FiBell} from 'react-icons/fi'
 import cookieConfig from '@/helpers/cookieConfig';
 import { withIronSessionSsr } from "iron-session/next";
-import axios from 'axios';
+import checkCredentials from '@/helpers/checkCredentials';
+import http from '@/helpers/http.helper';
 
 export const getServerSideProps = withIronSessionSsr(
-    async function getServerSideProps({ req }) {
+    async function getServerSideProps({ req, res }) {
         const token = req.session?.token
-        const {data} = await axios.get('https://cute-lime-goldfish-toga.cyclic.app/profile', {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
+        checkCredentials(token, res, '/auth/login')
+        const {data} = await http(token).get('/profile')
         return {
             props: {
                 token,
