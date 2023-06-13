@@ -2,18 +2,17 @@ import React from 'react'
 import Image from 'next/image';
 import {FiBell} from 'react-icons/fi'
 import logout from '../../../../public/log-out.png';
-import avatar from '../../../../public/Rectangle 25.png';
 import grid from '../../../../public/grid.svg';
 import {AiOutlineUser} from 'react-icons/ai';
 import {AiOutlinePlus} from 'react-icons/ai';
 import {AiOutlineArrowUp} from 'react-icons/ai';
-import {HiOutlineLockClosed} from 'react-icons/hi';
-import {AiOutlineEyeInvisible} from 'react-icons/ai';
 import Link from 'next/link'
 import cookieConfig from '@/helpers/cookieConfig';
 import { withIronSessionSsr } from "iron-session/next";
 import checkCredentials from '@/helpers/checkCredentials';
 import http from '@/helpers/http.helper';
+import PinInput from '@/components/PinInput';
+import { useDispatch } from 'react-redux';
 
 export const getServerSideProps = withIronSessionSsr(
     async function getServerSideProps({ req, res }) {
@@ -31,6 +30,13 @@ export const getServerSideProps = withIronSessionSsr(
 );
 
 function ChangePin({user}) {
+    const [pin, setPin] = React.useState('')
+    const dispatch = useDispatch()
+
+    const doChangePin = async(event)=> {
+        event.preventDefault()
+        const {value: username} = event.target.username
+    }
     return (
         <div className='bg-[#E5E5E5]'>
             <div className='w-full bg-white h-24 flex justify-around items-center'>
@@ -74,14 +80,7 @@ function ChangePin({user}) {
                         <div className='w-[350px] text-slate-400'>Enter your current 6 digits Fazzpay PIN below to continue to the next steps.</div>
                     </div>
                     <div className='grid justify-center content-center gap-12 relative top-24 w-full'>
-                        <div className='flex gap-6'>
-                            <div className='w-[53px] h-[65px] bg-white border-2 rounded-xl'></div>
-                            <div className='w-[53px] h-[65px] bg-white border-2 rounded-xl'></div>
-                            <div className='w-[53px] h-[65px] bg-white border-2 rounded-xl'></div>
-                            <div className='w-[53px] h-[65px] bg-white border-2 rounded-xl'></div>
-                            <div className='w-[53px] h-[65px] bg-white border-2 rounded-xl'></div>
-                            <div className='w-[53px] h-[65px] bg-white border-2 rounded-xl'></div>
-                        </div>
+                        <PinInput onChangePin={setPin}/>
                         <button className='btn btn-primary text-white'>Continue</button>
                     </div>
                 </div>

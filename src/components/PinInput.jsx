@@ -24,12 +24,11 @@ function PinInput({onChangePin}) {
         for(const key in pinInput){
             pin.push(pinInput[key].current.value)
         }
-        setPin(pin.join(''))
+        onChangePin(pin.join(''))
     }
 
     return (
-        <form onSubmit={submitPin} className='grid gap-10 relative top-4'>
-            <div className='flex gap-6'>
+            <div className='flex flex-wrap justify-center gap-6'>
                 <input onChange={changeValue} name='1' ref={pinInput.input1} type='number' className='w-[53px] h-[65px] bg-white border-2 rounded-xl text-4xl text-center'></input>
                 <input onChange={changeValue} name='2' ref={pinInput.input2} type='number' className='w-[53px] h-[65px] bg-white border-2 rounded-xl text-4xl text-center'></input>
                 <input onChange={changeValue} name='3' ref={pinInput.input3} type='number' className='w-[53px] h-[65px] bg-white border-2 rounded-xl text-4xl text-center'></input>
@@ -37,10 +36,6 @@ function PinInput({onChangePin}) {
                 <input onChange={changeValue} name='5' ref={pinInput.input5} type='number' className='w-[53px] h-[65px] bg-white border-2 rounded-xl text-4xl text-center'></input>
                 <input onChange={changeValue} name='6' ref={pinInput.input6} type='number' className='w-[53px] h-[65px] bg-white border-2 rounded-xl text-4xl text-center'></input>
             </div>
-            <div className='grid gap-4'>
-                <button type='submit' className='btn btn-primary w-full tracking-wider'>Confirm</button>
-            </div>
-        </form>
     )
 }
 

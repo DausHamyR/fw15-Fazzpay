@@ -4,15 +4,21 @@ const initialState = {
     email: ''
 }
 
-const Auth = createSlice({
+const auth = createSlice({
     name: 'auth',
     initialState,
     reducers: {
         saveEmail: (state, action) => {
             state.email = action.payload
+        },
+        savePin: (state, action) => {
+            state.pin = action.payload
+        },
+        clearAuthState: ()=> {
+            return initialState
         }
     }
 })
 
-export const {saveEmail} = auth.actions
-export default Auth.reducer
+export const {saveEmail, savePin, clearAuthState} = auth.actions
+export default auth.reducer

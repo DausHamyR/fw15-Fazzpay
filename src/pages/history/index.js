@@ -86,21 +86,21 @@ function History({user, history}) {
                         <div className='font-bold'>Transaction History</div>
                         <div className='w-[155px] h-[40px] bg-slate-200 flex justify-center items-center rounded-xl'>-- Select Filter --</div>
                     </div>
-                    <div className='grid gap-8'>
+                    <div className='grid gap-8 mt-6'>
                         {historyUser.map(historyUser => {
                             return (
-                        <Link href={`/history/status/${historyUser.id}`} key={`history-${historyUser.id}`} className='flex justify-around items-center'>
-                            <div className='flex relative top-12 left-4 gap-4'>
+                        <div key={`history-${historyUser.id}`} className='flex justify-around items-start'>
+                            <Link href={`/history/status/${historyUser.id}`} className='flex gap-4'>
                                 <Image src={historyUser.recipient.picture} className='rounded-xl' width={50} height={50} alt='avatar' />
                                 <div className='grid gap-2'>
                                     <div className='font-bold'>{historyUser.recipient.fullName}</div>
                                     <div className='text-sm'>{historyUser.type}</div>
                                 </div>
-                            </div>
-                            <div>
-                                <div className={`relative top-12 font-bold ${historyUser.type === 'TOP-UP' ? 'text-green-500' : 'text-red-500'}`}>Rp.{historyUser.amount.toLocaleString('id-ID')}</div>
-                            </div>
-                        </Link>
+                            </Link>
+                            <Link href={`/history/status/${historyUser.id}`}>
+                                <div className={`font-bold ${historyUser.type === 'TOP-UP' ? 'text-green-500' : 'text-red-500'}`}>Rp.{historyUser.amount.toLocaleString('id-ID')}</div>
+                            </Link>
+                        </div>
                             )
                         })}
                         {/* <div className='flex justify-around items-center'>

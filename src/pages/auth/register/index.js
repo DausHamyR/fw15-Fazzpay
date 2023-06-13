@@ -48,10 +48,10 @@ function Register() {
             }
             const body = new URLSearchParams({username, email, password}).toString()
             const {data} = await http().post('/auth/register', body)
-            dispatch(saveEmail(email))
             setSuccessMessage(data.message)
-            router.push('/auth/set-pin')
             setErrorMessage('')
+            dispatch(saveEmail(email))
+            router.push('/auth/set-pin')
         }catch(err){
             const message = err?.response?.data?.message
             if(message){
@@ -69,25 +69,22 @@ function Register() {
             <title>Page Register</title>
         </Head>
         <div className='flex'>
-            <div className='w-[55%] h-screen bg-[#6379F4] relative'>
-                <div className='absolute left-32 top-12 text-white'>
+            <div className='w-[55%] max-sm:hidden h-screen bg-[#6379F4] relative'>
+                <div className='absolute left-[15%] max-md:left-[5%] top-12 text-white'>
                     <div className='text-2xl font-semibold text-white'>FazzPay</div>
-                    <Image src={phone} alt='phone' />
-                    <div className='grid gap-4 relative top-[-30px] w-[550px]'>
+                    <Image className='h-[575px] max-xl:h-[530px] w-[512px]' src={phone} alt='phone' />
+                    <div className='grid gap-4 relative top-[-30px] w-full'>
                         <div className='font-semibold text-xl'>App that Covering Banking Needs.</div>
-                        <div className='text-sm font-extralight'>FazzPay is an application that focussing in banking needs for all users
-    in the world. Always updated and always following world trends.
-    5000+ users registered in FazzPay everyday with worldwide
-    users coverage.</div>
+                        <div className='text-sm font-extralight'>FazzPay is an application that focussing in banking needs for all users in the world. Always updated and always following world trends. 5000+ users registered in FazzPay everyday with worldwide users coverage.</div>
                     </div>
                 </div>
             </div>
-            <div className='w-[40%] h-screen'>
-                <div className='w-36 grid left-12 relative gap-7'>
-                    <div className='w-[90%] font-bold text-2xl leading-relaxed'>Start Accessing Banking Needs
-    With All Devices and All Platforms
-    With 30.000+ Users</div>
-                    <div className='w-[433px] text-slate-400 leading-8 text-base'>Transfering money is eassier than ever, you can access FazzPay wherever you are. Desktop, laptop, mobile phone? we cover all of that for you!</div>
+            <div className='w-[45%] max-sm:w-[90%] max-sm:ml-4 max-sm:mt-12 h-screen max-sm:h-[500px]'>
+                <div className='w-[85%] max-lg:w-[90%] grid left-12 max-lg:left-2 relative top-20 max-md:top-0 gap-7'>
+                    <div className='w-[90%] max-sm:hidden font-bold text-2xl leading-relaxed'>Start Accessing Banking Needs With All Devices and All Platforms With 30.000+ Users</div>
+                    <div className='w-[90%] sm:hidden font-bold text-2xl leading-relaxed'>Sign Up</div>
+                    <div className='w-full max-sm:hidden text-slate-400 leading-8 text-base'>Transfering money is eassier than ever, you can access FazzPay wherever you are. Desktop, laptop, mobile phone? we cover all of that for you!</div>
+                    <div className='w-full sm:hidden text-slate-400 leading-8 text-base'>Create your account to access FazzPay.</div>
                     {errorMessage && (
                     <div>
                         <h1 className="alert alert-error w-[400px]">{errorMessage}</h1>
