@@ -14,7 +14,6 @@ import checkCredentials from '@/helpers/checkCredentials';
 import http from '@/helpers/http.helper';
 import Navbar from '@/components/Navbar';
 import TopUp from '@/components/TopUp';
-// import Navbar from '@/components/Navbar';
 
 export const getServerSideProps = withIronSessionSsr(
     async function getServerSideProps({ req, res }) {
@@ -84,7 +83,10 @@ function Home({user,history}) {
                     <div className='bg-[#6379F4] h-[190px] rounded-xl flex justify-between items-center'>
                         <div className='relative left-8 text-slate-300 text-sm grid gap-5 font-semibold'>
                             <div>Balance</div>
-                            <div className='text-white text-3xl'>Rp.{user.balance.toLocaleString('id-ID')}</div>
+                            {user.balance === null ? 
+                                (<div className='text-white text-3xl'>Rp.0</div>) :
+                                (<div className='text-white text-3xl'>Rp.{user.balance.toLocaleString('id-ID')}</div>) 
+                            }
                             <div>{user.phones}</div>
                         </div>
                         <div className='grid gap-4 relative right-8'>

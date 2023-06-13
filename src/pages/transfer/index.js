@@ -12,6 +12,7 @@ import { withIronSessionSsr } from "iron-session/next";
 import axios from 'axios';
 import checkCredentials from '@/helpers/checkCredentials';
 import cookieConfig from '@/helpers/cookieConfig';
+import Navbar from '@/components/Navbar';
 
 export const getServerSideProps = withIronSessionSsr(
     async function getServerSideProps({ req, res }) {
@@ -47,17 +48,7 @@ function Transfer({user, history}) {
 
     return (
         <div className='bg-[#E5E5E5]'>
-            <div className='w-full bg-white h-24 flex justify-around items-center'>
-                <div className='text-blue-500 text-2xl font-bold'>FazzPay</div>
-                <div className='flex items-center gap-6'>
-                    <Image className='rounded-xl' src={user.picture} width={50} height={50} alt='avatar'/>
-                    <div className='grid'>
-                        <div>{user.fullName}</div>
-                        <div>{user.phones}</div>
-                    </div>
-                    <FiBell size={25}/>
-                </div>
-            </div>
+            <Navbar user={user}/>
             <div className='flex justify-center gap-8'>
                 <div className='w-[270px] h-[678px] grid content-around justify-items-center bg-white relative top-12 rounded-xl'>
                     <div className='relative grid gap-12 top-12 font-semibold'>

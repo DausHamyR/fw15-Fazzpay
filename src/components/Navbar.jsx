@@ -1,5 +1,6 @@
 import React from 'react'
 import Image from 'next/image';
+import defaultPicture from '../../public/daw.jpg';
 import {FiBell} from 'react-icons/fi'
 import cookieConfig from '@/helpers/cookieConfig';
 import { withIronSessionSsr } from "iron-session/next";
@@ -27,7 +28,10 @@ function Navbar({user}) {
         <div className='w-full bg-white h-24 flex justify-around items-center'>
             <div className='text-blue-500 text-2xl font-bold'>FazzPay</div>
                 <div className='flex items-center gap-6'>
-                    <Image src={user.picture} width={60} height={60} className='rounded-xl' alt='avatar'/>
+                    {user.picture === null ? 
+                        <Image src={defaultPicture} width={60} height={60} className='rounded-xl' alt='avatar'/> :
+                        <Image src={user.picture} width={60} height={60} className='rounded-xl' alt='avatar'/>
+                    }
                     <div className='grid'>
                         <div>{user.fullName}</div>
                     <div>{user.phones}</div>

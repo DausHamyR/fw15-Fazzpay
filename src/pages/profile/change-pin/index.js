@@ -1,6 +1,5 @@
 import React from 'react'
 import Image from 'next/image';
-import {FiBell} from 'react-icons/fi'
 import logout from '../../../../public/log-out.png';
 import grid from '../../../../public/grid.svg';
 import {AiOutlineUser} from 'react-icons/ai';
@@ -13,6 +12,7 @@ import checkCredentials from '@/helpers/checkCredentials';
 import http from '@/helpers/http.helper';
 import PinInput from '@/components/PinInput';
 import { useDispatch } from 'react-redux';
+import Navbar from '@/components/Navbar';
 
 export const getServerSideProps = withIronSessionSsr(
     async function getServerSideProps({ req, res }) {
@@ -39,17 +39,7 @@ function ChangePin({user}) {
     }
     return (
         <div className='bg-[#E5E5E5]'>
-            <div className='w-full bg-white h-24 flex justify-around items-center'>
-                <div className='text-blue-500 text-2xl font-bold'>FazzPay</div>
-                <div className='flex items-center gap-6'>
-                    <Image src={user.picture} className='rounded-xl' width={50} height={50} alt='avatar'/>
-                    <div className='grid'>
-                        <div>{user.fullName}</div>
-                        <div>{user.phones}</div>
-                    </div>
-                    <FiBell size={25}/>
-                </div>
-            </div>
+            <Navbar user={user}/>
             <div className='flex justify-center gap-8'>
                 <div className='w-[270px] h-[678px] grid content-around justify-items-center bg-white relative top-12 rounded-xl'>
                     <div className='relative grid gap-12 top-12 font-semibold'>

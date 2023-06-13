@@ -1,6 +1,7 @@
 import React from 'react'
 import Image from 'next/image';
 import {FiBell} from 'react-icons/fi'
+import defaultPicture from '../../../public/daw.jpg';
 import logout from '../../../public/log-out.png';
 import grid from '../../../public/grid.svg';
 import {AiOutlineUser} from 'react-icons/ai';
@@ -13,6 +14,7 @@ import cookieConfig from '@/helpers/cookieConfig';
 import { withIronSessionSsr } from "iron-session/next";
 import axios from 'axios';
 import checkCredentials from '@/helpers/checkCredentials';
+import Navbar from '@/components/Navbar';
 
 export const getServerSideProps = withIronSessionSsr(
     async function getServerSideProps({ req, res }) {
@@ -38,17 +40,7 @@ export const getServerSideProps = withIronSessionSsr(
 function Profile({user}) {
     return (
         <div className='bg-[#E5E5E5]'>
-            <div className='w-full bg-white h-24 flex justify-around items-center'>
-                <div className='text-blue-500 text-2xl font-bold'>FazzPay</div>
-                <div className='flex items-center gap-6'>
-                    <Image src={user.picture} width={50} height={50} className='rounded-xl' alt='avatar'/>
-                    <div className='grid'>
-                        <div>{user.fullName}</div>
-                        <div>{user.phones}</div>
-                    </div>
-                    <FiBell size={25}/>
-                </div>
-            </div>
+            <Navbar user={user}/>
             <div className='flex justify-center gap-8'>
                 <div className='w-[270px] h-[678px] grid content-around justify-items-center bg-white relative top-12 rounded-xl'>
                     <div className='relative grid gap-12 top-12 font-semibold'>
@@ -75,7 +67,10 @@ function Profile({user}) {
                 </div>
                 <div className='w-[950px] h-[678px] bg-white relative top-12 rounded-xl grid justify-items-center gap-16'>
                     <div className='grid justify-items-center content-start gap-2 relative top-24'>
-                        <Image src={user.picture} width={50} height={50} className='rounded-xl' alt='user'/>
+                        {user.picture === null ? 
+                            <Image src={defaultPicture} width={60} height={60} className='rounded-xl' alt='avatar'/> :
+                            <Image src={user.picture} width={60} height={60} className='rounded-xl' alt='avatar'/>
+                        }
                         <div className='flex gap-2 items-center'>
                             <AiOutlineEdit />
                             <div className='text-xs'>Edit</div>

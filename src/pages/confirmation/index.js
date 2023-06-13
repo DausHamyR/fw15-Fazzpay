@@ -1,33 +1,37 @@
 import React from 'react'
 import Image from 'next/image';
-import {FiBell} from 'react-icons/fi'
 import logout from '../../../public/log-out.png';
-import plusTransfer from '../../../public/Group 33.png';
-import topUp from '../../../public/Group 34.png';
 import avatar from '../../../public/Rectangle 25.png';
-import graphic from '../../../public/graphic.png';
 import grid from '../../../public/grid.svg';
 import {AiOutlineUser} from 'react-icons/ai';
 import {AiOutlinePlus} from 'react-icons/ai';
 import {AiOutlineArrowUp} from 'react-icons/ai';
-import {AiOutlineArrowDown} from 'react-icons/ai';
-import {AiOutlineSearch} from 'react-icons/ai';
 import Link from 'next/link'
+import Navbar from '@/components/Navbar';
+import cookieConfig from '@/helpers/cookieConfig';
+import { withIronSessionSsr } from "iron-session/next";
+import checkCredentials from '@/helpers/checkCredentials';
+import http from '@/helpers/http.helper';
 
-function Confirmation() {
+export const getServerSideProps = withIronSessionSsr(
+    async function getServerSideProps({ req, res }) {
+        const token = req.session?.token
+        checkCredentials(token, res, '/auth/login')
+        const {data} = await http(token).get('/profile')
+        return {
+            props: {
+                token,
+                user: data.results,
+            },
+        };
+    },
+    cookieConfig
+);
+
+function Confirmation({user}) {
     return (
         <div className='bg-[#E5E5E5]'>
-            <div className='w-full bg-white h-24 flex justify-around items-center'>
-                <div className='text-blue-500 text-2xl font-bold'>FazzPay</div>
-                <div className='flex items-center gap-6'>
-                    <Image src={avatar} alt='avatar'/>
-                    <div className='grid'>
-                        <div>Robert Chandler</div>
-                        <div>+62 8139 3877 7946</div>
-                    </div>
-                    <FiBell size={25}/>
-                </div>
-            </div>
+            <Navbar user={user}/>
             <div className='flex justify-center gap-8'>
                 <div className='w-[270px] h-[678px] grid content-around justify-items-center bg-white relative top-12 rounded-xl'>
                     <div className='relative grid gap-12 top-12 font-semibold'>
