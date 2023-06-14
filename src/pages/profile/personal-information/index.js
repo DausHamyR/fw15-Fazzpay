@@ -12,6 +12,7 @@ import cookieConfig from '@/helpers/cookieConfig';
 import checkCredentials from '@/helpers/checkCredentials';
 import axios from 'axios';
 import Navbar from '@/components/Navbar';
+import http from '@/helpers/http.helper';
 
 export const getServerSideProps = withIronSessionSsr(
     async function getServerSideProps({ req, res }) {
@@ -35,6 +36,34 @@ export const getServerSideProps = withIronSessionSsr(
   );
 
 function PersonalInformation({user}) {
+    const editProfile = async (values) => {
+        setOpenModal(true)
+        const form = new FormData()
+        Object.keys(values).forEach((key)=> {
+            if(values[key]) {
+                if(key === 'birthDate') {
+                    form.append(key, moment(values[key], 'DD-MM-YYYY').format('YYYY/MM/DD'))
+                }else {
+                    form.append(key, values[key])
+                }
+            }
+        })
+        if(selectedPicture) {
+            form.append('picture', selectedPicture)
+        }
+        const {data} = await http(token).patch('/profile', form, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+        setProfile(data.results)
+        setEditBirthday(false)
+        setEditUsername(false)
+        setEditEmail(false)
+        setEditPhoneNumber(false)
+        setOpenModal(false)
+    }
+
     return (
         <div className='bg-[#E5E5E5]'>
             <Navbar user={user}/>

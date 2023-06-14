@@ -69,9 +69,9 @@ function Register() {
             <title>Page Register</title>
         </Head>
         <div className='flex'>
-            <div className='w-[55%] max-sm:hidden h-screen bg-[#6379F4] relative'>
+            <div className='w-[55%] max-sm:hidden h-screen bg-[#05BFDB] relative'>
                 <div className='absolute left-[15%] max-md:left-[5%] top-12 text-white'>
-                    <div className='text-2xl font-semibold text-white'>FazzPay</div>
+                    <div className='text-2xl font-semibold text-white'>Pay<span className='text-[#0A4D68]'>Easy</span></div>
                     <Image className='h-[575px] max-xl:h-[530px] w-[512px]' src={phone} alt='phone' />
                     <div className='grid gap-4 relative top-[-30px] w-full'>
                         <div className='font-semibold text-xl'>App that Covering Banking Needs.</div>

@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image';
-import logout from '../../../public/log-out.png';
 import graphic from '../../../public/graphic.png';
-import grid from '../../../public/grid.svg';
-import {AiOutlineUser} from 'react-icons/ai';
+import defaultPicture from '../../../public/daw.jpg';
 import {AiOutlinePlus} from 'react-icons/ai';
 import {AiOutlineArrowUp} from 'react-icons/ai';
 import {AiOutlineArrowDown} from 'react-icons/ai';
@@ -13,18 +11,21 @@ import { withIronSessionSsr } from "iron-session/next";
 import checkCredentials from '@/helpers/checkCredentials';
 import http from '@/helpers/http.helper';
 import Navbar from '@/components/Navbar';
-import TopUp from '@/components/TopUp';
+import Footer from '@/components/Footer';
+import Dashboard from '@/components/Dashboard';
+import { useSelector } from 'react-redux';
+import profile from '@/redux/reducers/profile';
 
 export const getServerSideProps = withIronSessionSsr(
     async function getServerSideProps({ req, res }) {
         const token = req.session?.token
         checkCredentials(token, res, '/auth/login')
-        const {data} = await http(token).get('/profile')
-        const {data: historyTransactions} = await http(token).get('/transactions')
+        // const {data} = await http(token).get('/profile')
+        const {data: historyTransactions} = await http(token).get('/transactions', {params: {limit:4}})
         return {
             props: {
                 token,
-                user: data.results,
+                // user: data.results,
                 history: historyTransactions.results
             },
         };
@@ -32,11 +33,18 @@ export const getServerSideProps = withIronSessionSsr(
     cookieConfig
 );
 
-function Home({user,history}) {
+function Home({history, token}) {
+    const user = useSelector(state => state.profile.data)
     const [historyUser, setHistoryUser] = useState([])
+
+    const getTransaction = React.useCallback(async()=>{
+        const {data} = await http(token).get('/transactions', {params: {limit:4}})
+        setHistoryUser(data.results)
+    },[token])
+
     useEffect(()=> {
-        setHistoryUser(history)
-    }, [history])
+        getTransaction()
+    }, [getTransaction])
 
     const calculateTotalTopUp = () => {
         let totalTopUp = 0;
@@ -54,40 +62,15 @@ function Home({user,history}) {
     
     return (
         <div className='bg-[#E5E5E5]'>
-            <Navbar user={user}/>
+            <Navbar token={token}/>
             <div className='flex justify-center gap-8'>
-                <div className='w-[270px] h-[678px] grid content-around justify-items-center bg-white relative top-12 rounded-xl'>
-                    <div className='relative grid gap-12 top-12 font-semibold'>
-                        <div className='flex gap-2 items-center'>
-                            <Image src={grid} alt='grid' />
-                            <div className='text-blue-500'>Dashboard</div>
-                        </div>
-                        <div className='flex gap-2 items-center'>
-                            <AiOutlineArrowUp />
-                            <Link href='/transfer'>Transfer</Link>
-                        </div>
-                        <div className='flex gap-2 items-center'>
-                            <AiOutlinePlus />
-                            <TopUp />
-                        </div>
-                        <div className='flex gap-2 items-center'>
-                            <AiOutlineUser />
-                            <Link href='/profile'>Profile</Link>
-                        </div>
-                    </div>
-                    <Link href='/auth/logout' className='flex gap-2 items-center font-semibold'>
-                        <Image src={logout} alt='logout'/>Logout
-                    </Link>
-                </div>
+                <Dashboard />
                 <div className='w-[950px] h-[678px] bg-white relative top-12 rounded-xl'>
-                    <div className='bg-[#6379F4] h-[190px] rounded-xl flex justify-between items-center'>
+                    <div className='bg-[#05BFDB] h-[190px] rounded-xl flex justify-between items-center'>
                         <div className='relative left-8 text-slate-300 text-sm grid gap-5 font-semibold'>
                             <div>Balance</div>
-                            {user.balance === null ? 
-                                (<div className='text-white text-3xl'>Rp.0</div>) :
-                                (<div className='text-white text-3xl'>Rp.{user.balance.toLocaleString('id-ID')}</div>) 
-                            }
-                            <div>{user.phones}</div>
+                            <div className='text-white text-3xl'>{user?.balance ? `Rp${Number(user?.balance).toLocaleString('id')}`: 'Rp.0'}</div>
+                            <div>{user?.email}</div>
                         </div>
                         <div className='grid gap-4 relative right-8'>
                             <Link href='/transfer' className='w-[162px] h-[57px] bg-slate-300 rounded-xl flex justify-center items-center gap-2'>
@@ -101,7 +84,7 @@ function Home({user,history}) {
                         </div>
                     </div>
                     <div className='flex justify-around'>
-                        <div className='grid content-center gap-16'>
+                        <div className='grid content-center gap-16 max-lg:hidden'>
                             <div className='flex justify-around'>
                                 <div className='grid gap-2'>
                                     <AiOutlineArrowDown size={25} className='text-green-600'/>
@@ -116,26 +99,66 @@ function Home({user,history}) {
                             </div>
                             <Image src={graphic} width={300} alt='graphic'/>
                         </div>
-                        <div className='w-[367px] h-[468px]'>
-                            <div className='flex justify-around relative top-4'>
+                        <div className='w-[65%] max-lg:w-full h-[480px] px-12'>
+                            <div className='flex justify-between relative top-4'>
                                 <div className='font-bold'>Transaction History</div>
                                 <Link href='/history' className='text-blue-400'>See all</Link>
                             </div>
-                            <div className='grid gap-8 mt-16'>
+                            <div className='grid gap-10 mt-16'>
                                 {historyUser.map(historyTransaksi => {
                                     return (
-                                <Link href={`/history/status/${historyTransaksi.id}`} key={`history-${historyTransaksi.id}`} className='flex'>
+                                <div key={`history-${historyTransaksi.id}`} className='flex justify-between'>
                                     <div className='flex left-4 gap-4'>
-                                        <Image src={historyTransaksi.recipient.picture} className='rounded-xl' width={50} height={50} alt='avatar' />
-                                        <div className='grid gap-2'>
-                                            <div className='font-bold'>{historyTransaksi.recipient.fullName}</div>
-                                            <div className='text-sm'>{historyTransaksi.type}</div>
-                                        </div>
+                                        {historyTransaksi.type === "TOP-UP" && (
+                                            <>
+                                                <div>
+                                                    {!historyTransaksi.recipient.picture && <Image src={defaultPicture} className='rounded-xl' width={50} height={50} alt='avatar' />}
+                                                    {historyTransaksi.recipient.picture && <Image src={historyTransaksi.recipient.picture} className='rounded-xl' width={50} height={50} alt='avatar' />}
+                                                </div>
+                                                <div className='grid gap-2'>
+                                                    <div className='font-bold'>{historyTransaksi.recipient.fullName || historyTransaksi.recipient.email}</div>
+                                                    <div className='text-sm'>Topup</div>
+                                                </div>
+                                            </>
+                                        )}
+                                        {historyTransaksi.type === "TRANSFER" && (
+                                            <>
+                                                {historyTransaksi.recipient.id !== user.id &&
+                                                <>
+                                                <div>
+                                                    {!historyTransaksi.recipient.picture && <Image src={defaultPicture} className='rounded-xl' width={50} height={50} alt='avatar' />}
+                                                    {historyTransaksi.recipient.picture && <Image src={historyTransaksi.recipient.picture} className='rounded-xl' width={50} height={50} alt='avatar' />}
+                                                </div>
+                                                <div className='grid gap-2'>
+                                                    <div className='font-bold'>{historyTransaksi.recipient.fullName || historyTransaksi.recipient.email}</div>
+                                                    <div className='text-sm'>Outcome</div>
+                                                </div>
+                                                </>}
+                                                {historyTransaksi.recipient.id === user.id &&
+                                                <>
+                                                <div>
+                                                    {!historyTransaksi.sender.picture && <Image src={defaultPicture} className='rounded-xl' width={50} height={50} alt='avatar' />}
+                                                    {historyTransaksi.sender.picture && <Image src={historyTransaksi.sender.picture} className='rounded-xl' width={50} height={50} alt='avatar' />}
+                                                </div>
+                                                <div className='grid gap-2'>
+                                                    <div className='font-bold'>{historyTransaksi.sender.fullName || historyTransaksi.sender.email}</div>
+                                                    <div className='text-sm'>Income</div>
+                                                </div>
+                                                </>}
+                                            </>
+                                        )}
                                     </div>
-                                    <div>
-                                        <div className={`relative right-[-100px] font-bold ${historyTransaksi.type === 'TOP-UP' ? 'text-green-500' : 'text-red-500'}`}>Rp.{historyTransaksi.amount.toLocaleString('id-ID')}</div>
-                                    </div>
-                                </Link>
+                                    {historyTransaksi.type === "TOP-UP" &&
+                                        <div className='text-green-600'>+ Rp{Number(historyTransaksi.amount).toLocaleString('id')}</div>
+                                    }
+                                    {historyTransaksi.type === "TRANSFER" && (historyTransaksi.recipient.id === user.id ?
+                                        (<div className='text-green-600'>+ Rp{Number(historyTransaksi.amount).toLocaleString('id')}</div>) : 
+                                        (<div className='text-red-600'>- Rp{Number(historyTransaksi.amount).toLocaleString('id')}</div>) 
+                                    )}
+                                    {/* {historyTransaksi.type === "TOP-UP" &&
+                                        <div className='text-green-600'>+ Rp{Number(historyTransaksi.amount).toLocaleString('id')}</div>
+                                    } */}
+                                </div>
                                     )
                                 })}
                             </div>
@@ -143,13 +166,7 @@ function Home({user,history}) {
                     </div>
                 </div>
             </div>
-            <div className='flex justify-around items-center relative top-20 bg-[#6379F4] h-[68px] text-white'>
-                <div>2020 FazzPay. All right reserved.</div>
-                <div className='flex gap-8'>
-                    <div>+62 5637 8882 9901</div>
-                    <div>contact@fazzpay.com</div>
-                </div>
-            </div>
+            <Footer />
         </div>
     )
 }

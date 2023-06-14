@@ -14,12 +14,13 @@ import partners6 from '../../public/Group 23.png';
 import phone2 from '../../public/png-phone2.png';
 import avatar from '../../public/Rectangle 25.png';
 import Link from 'next/link'
+import Footer from '@/components/Footer';
 
 function LandingPage() {
     return (
-        <div className='h-screen'>
-            <div className='w-full bg-white h-24 flex justify-around items-center'>
-                <div className='text-blue-500 text-2xl font-bold'>FazzPay</div>
+        <div className='min-h-screen bg-[#05BFDB]'>
+            <div className='w-full h-24 flex justify-around items-center'>
+                <div className='text-2xl font-semibold text-white'>Pay<span className='text-[#0A4D68]'>Easy</span></div>
                 <div className='flex items-center gap-6 z-10'>
                     <Link href='/auth/login' className='btn btn-primary text-white border-white'>Login</Link>
                     <Link href='/auth/register' className='btn'>Sign Up</Link>
@@ -120,17 +121,7 @@ function LandingPage() {
                     </div>
                 </div>
             </div>
-            <div className='bg-[#6379F4] h-[438px] relative top-[-150px] flex justify-around text-white'>
-                <div className='grid content-center gap-12'>
-                    <div className='text-4xl font-semibold'>FazzPay</div>
-                    <div className='text-md text-slate-300 w-[350px] leading-loose'>Simplify financial needs and saving much time in banking needs with one single app.</div>
-                    <div className='font-extralight'>2020 FazzPay. All right reserved.</div>
-                </div>
-                <div className='flex gap-8 items-end h-[330px]'>
-                    <div>+62 5637 8882 9901</div>
-                    <div>contact@fazzpay.com</div>
-                </div>
-            </div>
+            <Footer />
         </div>
     )
 }
