@@ -1,13 +1,6 @@
 import React from 'react'
 import Image from 'next/image';
-import logout from '../../../public/log-out.png';
-import avatar from '../../../public/Rectangle 25.png';
 import defaultPicture from '../../../public/daw.jpg';
-import grid from '../../../public/grid.svg';
-import {AiOutlineUser} from 'react-icons/ai';
-import {AiOutlinePlus} from 'react-icons/ai';
-import {AiOutlineArrowUp} from 'react-icons/ai';
-import Link from 'next/link'
 import Navbar from '@/components/Navbar';
 import cookieConfig from '@/helpers/cookieConfig';
 import { withIronSessionSsr } from "iron-session/next";
@@ -45,7 +38,7 @@ function Confirmation({token}) {
     const notes = useSelector(state => state.transfer.notes)
     const [pin, setPin] = React.useState('')
 
-    const processTransfer = async(token)=>{
+    const processTransfer = async()=>{
         const form = new URLSearchParams({
             recipientId: recipient.id,
             notes,

@@ -7,7 +7,7 @@ const http = (token,) => {
     }
     const instance = axios.create({
         headers,
-        baseURL: 'https://cute-lime-goldfish-toga.cyclic.app'
+        baseURL: 'https://outstanding-train-fawn.cyclic.app'
     })
     instance.interceptors.response.use((response)=> {
         return response

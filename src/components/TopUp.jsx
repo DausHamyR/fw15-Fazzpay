@@ -43,8 +43,8 @@ function TopUp({token}) {
 
     return (
     <>
-        <label htmlFor='pin-input' className='btn btn-primary text-white'>TopUp</label>
-        <input type="checkbox" id="pin-input" className="modal-toggle" />
+        <label htmlFor='pin-topup' className='btn btn-primary text-white'>TopUp</label>
+        <input type="checkbox" id="pin-topup" className="modal-toggle" />
         <div className="modal">
         <div className="modal-box flex flex-col gap-4">
             <h3 className="font-bold text-lg">TopUp</h3>

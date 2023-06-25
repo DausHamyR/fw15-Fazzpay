@@ -29,7 +29,7 @@ export const getServerSideProps = withIronSessionSsr(
     cookieConfig
 );
 
-function ChangePin({user}) {
+function ChangePin({user, token}) {
     const [pin, setPin] = React.useState('')
     const dispatch = useDispatch()
 
@@ -39,7 +39,7 @@ function ChangePin({user}) {
     }
     return (
         <div className='bg-[#E5E5E5]'>
-            <Navbar user={user}/>
+            <Navbar token={token}/>
             <div className='flex justify-center gap-8'>
                 <div className='w-[270px] h-[678px] grid content-around justify-items-center bg-white relative top-12 rounded-xl'>
                     <div className='relative grid gap-12 top-12 font-semibold'>

@@ -606,6 +606,28 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "USERS",
+			"item": [
+				{
+					"name": "GET ALL USERS",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/users",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	],
 	"auth": {
@@ -641,7 +663,7 @@
 	"variable": [
 		{
 			"key": "url",
-			"value": "https://cute-lime-goldfish-toga.cyclic.app",
+			"value": "https://outstanding-train-fawn.cyclic.app",
 			"type": "string"
 		}
 	]
