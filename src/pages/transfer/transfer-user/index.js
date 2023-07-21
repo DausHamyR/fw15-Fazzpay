@@ -62,7 +62,7 @@ function TransferUser({token}) {
                         <div className='grid relative top-12 gap-4 h-20'>
                             <div className='font-bold'>Transfer Money</div>
                             <div className='drop-shadow-lg rounded-lg bg-white w-full flex gap-4'>
-                                {!recipient.picture ?
+                                {recipient.picture === null ?
                                     <Image src={defaultPicture} className='rounded-xl' width={50} height={50} alt='user'/> :
                                     <Image src={recipient.picture} className='rounded-xl' width={50} height={50} alt='user'/> 
                                 }

@@ -41,9 +41,9 @@ return (
         <div className='w-full bg-[#05BFDB] h-24 flex justify-between items-center px-24 max-sm:px-4'>
             <div className='text-2xl font-semibold text-white'>Pay<span className='text-[#0A4D68]'>Easy</span></div>
             <div className='flex items-center gap-6'>
-                {user.picture === null ? 
+                {user?.picture === null ? 
                     <Image src={defaultPicture} width={60} height={60} className='rounded-xl' alt='avatar'/> :
-                    <Image src={user.picture} width={60} height={60} className='rounded-xl' alt='avatar'/>
+                    <Image src={user?.picture} width={60} height={60} className='rounded-xl' alt='avatar'/>
                 }
                 <div className='grid'>
                     <div>{user?.fullName}</div> 

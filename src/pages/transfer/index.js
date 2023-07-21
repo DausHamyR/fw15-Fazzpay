@@ -18,13 +18,9 @@ export const getServerSideProps = withIronSessionSsr(
     async function getServerSideProps({ req, res }) {
         const token = req.session?.token
         checkCredentials(token, res, '/auth/login')
-        // const {data} = await http(token).get('/profile')
-        // const {data: dataUser} = await http(token).get('/users', {params: {limit:4}})
         return {
             props: {
                 token,
-                // user: data.results,
-                // userTransfer: dataUser.results,
             },
         };
     },
@@ -33,24 +29,16 @@ export const getServerSideProps = withIronSessionSsr(
 
 function Transfer({token}) {
     const dispatch = useDispatch()
-    // const [historyUser, setHistoryUser] = useState([])
     const [recipient, setRecipient] = useState({})
-    const [search, setSearch] = React.useState('')
+    const [search, setSearch] = useState('')
     const router = useRouter()
 
     const getUsers = React.useCallback(async(page=1, search='')=>{
         const {data} = await http(token).get('/users', {params: {page, search, limit: 4}})
         setRecipient(data)
-        // setHistoryUser(data.results)
     }, [token])
-    
-    useEffect(()=> {
-        // setHistoryUser(userTransfer)
-        getUsers()
-    }, [ getUsers])
 
     useEffect(()=> {
-        // setHistoryUser(userTransfer)
         getUsers(1, search)
     }, [ search, getUsers])
 
