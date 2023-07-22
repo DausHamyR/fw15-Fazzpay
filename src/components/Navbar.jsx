@@ -34,7 +34,9 @@ function Navbar({token}) {
 
     React.useEffect(()=> {
         getData()
-    }, [getData])
+        console.log(token)
+        console.log(user)
+    }, [getData, token, user])
     
 return (
     <div>
