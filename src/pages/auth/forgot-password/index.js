@@ -18,7 +18,9 @@ function ResetPassword() {
             event.preventDefault()
             const {value: email} = event.target.email
             const body = new URLSearchParams({email}).toString()
+            console.log(body)
             const {data} = await http().post('/auth/forgot-password', body)
+            console.log(data)
             if(data){
                 setSuccessMessage("Success, the code was sent to the email")
                 router.push('/auth/reset-password')

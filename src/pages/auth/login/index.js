@@ -82,7 +82,7 @@ function Login() {
         </Head>
         <div className='flex'>
             <div className='w-[55%] max-sm:hidden h-screen bg-[#05BFDB] relative'>
-                <div className='absolute left-[15%] max-md:left-[5%] top-12 text-white'>
+                <div className='absolute left-[15%] max-md:left-[5%] top-10 text-white'>
                     <div className='text-2xl font-semibold text-white'>Pay<span className='text-[#0A4D68]'>Easy</span></div>
                     <Image className='h-[575px] max-lg:h-[530px] w-[512px]' src={phone} alt='phone' />
                     <div className='grid gap-4 relative top-[-30px] w-full'>
@@ -92,7 +92,7 @@ function Login() {
                 </div>
             </div>
             <div className='w-[45%] max-sm:w-[90%] max-sm:ml-4 max-sm:mt-12 h-screen max-sm:h-[500px]'>
-                <div className='w-[85%] max-lg:w-[90%] grid left-12 max-lg:left-2 relative top-20 max-md:top-0 gap-7'>
+                <div className='w-[85%] max-lg:w-[90%] grid left-12 max-lg:left-2 relative top-4 max-md:top-0'>
                     <div className='w-[90%] max-sm:hidden font-bold text-2xl leading-relaxed'>Start Accessing Banking Needs With All Devices and All Platforms With 30.000+ Users</div>
                     <div className='w-[90%] sm:hidden sm:text-center font-bold text-2xl leading-relaxed'>Login</div>
                     <div className='w-full max-sm:hidden text-slate-400 leading-8 text-base'>Transfering money is eassier than ever, you can access FazzPay wherever you are. Desktop, laptop, mobile phone? we cover all of that for you!</div>
@@ -100,12 +100,12 @@ function Login() {
 all the features in FazzPay.</div>
                     {errorMessage && (
                     <div>
-                        <h1 className="alert alert-error w-[330px]">{errorMessage}</h1>
+                        <h1 className="alert alert-error max-w-[330px]">{errorMessage}</h1>
                     </div>
                     )}
                     {successMessage && (
                     <div>
-                        <h1 className="alert alert-success w-[330px]">{successMessage}</h1>
+                        <h1 className="alert alert-success max-w-[330px]">{successMessage}</h1>
                     </div>
                     )}
                     <form onSubmit={doLogin} className='grid gap-12 relative top-8'>
@@ -120,7 +120,7 @@ all the features in FazzPay.</div>
                             <div className='flex gap-4'>
                                 <Image src={lock} alt='lock' />
                                 <input name='password' type={showPassword? 'text' : 'password'} placeholder='Enter your password' className='border-none pl-4 tracking-wider w-full border-slate-400'/>
-                                <div onClick={handleTogglePassword}>
+                                <div className='absolute right-6' onClick={handleTogglePassword}>
                                     {showPassword ? 
                                         <AiOutlineEye size={25}/> :
                                         <AiOutlineEyeInvisible size={25}/> 
