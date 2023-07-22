@@ -1,17 +1,18 @@
 import React from 'react'
 import Image from 'next/image';
-import logout from '../../../public/log-out.png';
-import grid from '../../../public/grid.svg';
+import logout from '../../../../public/log-out.png';
+import grid from '../../../../public/grid.svg';
 import {AiOutlineUser} from 'react-icons/ai';
 import {AiOutlinePlus} from 'react-icons/ai';
 import {AiOutlineArrowUp} from 'react-icons/ai';
-import {BsTelephone} from 'react-icons/bs';
 import Link from 'next/link'
-import Navbar from '@/components/Navbar';
 import cookieConfig from '@/helpers/cookieConfig';
 import { withIronSessionSsr } from "iron-session/next";
 import checkCredentials from '@/helpers/checkCredentials';
 import http from '@/helpers/http.helper';
+import PinInput from '@/components/PinInput';
+import { useDispatch } from 'react-redux';
+import Navbar from '@/components/Navbar';
 import Dashboard from '@/components/Dashboard';
 import Footer from '@/components/Footer';
 
@@ -30,7 +31,14 @@ export const getServerSideProps = withIronSessionSsr(
     cookieConfig
 );
 
-function ManagePhoneNumber({user, token}) {
+function ChangePin({user, token}) {
+    const [pin, setPin] = React.useState('')
+    const dispatch = useDispatch()
+
+    const doChangePin = async(event)=> {
+        event.preventDefault()
+        const {value: username} = event.target.username
+    }
     return (
         <div className='bg-[#E5E5E5]'>
             <Navbar token={token}/>
@@ -40,20 +48,16 @@ function ManagePhoneNumber({user, token}) {
               </div>
               <div className='bg-white max-w-[850px] w-[850px] h-[678px] rounded-xl p-12'>
                 <div className='flex flex-col gap-6'>
-                  <div className='font-bold text-2xl'>Edit Phone Number</div>
-                  <div className='max-w-[350px]'>Add at least one phone number for the transfer ID so you can start transfering your money to another user.</div>
+                  <div className='font-bold text-2xl'>Change Pin</div>
+                  <div className='max-w-[350px]'>Enter your current 6 digits Fazzpay PIN below to continue to the next steps.</div>
                 </div>
                 <div className='mt-32 mb-32 flex justify-center'>
                   <div className='max-w-[500px] w-full flex flex-col gap-12'>
                     <div className='flex items-center'>
-                      <div className='flex gap-2 absolute px-4 items-center'>
-                        <BsTelephone size={30}/>
-                        <div className='font-bold'>+62</div>
-                      </div>
-                      <input name='fullName' type="text" placeholder='Enter your phone number' className={`input input-bordered w-full pl-24`} />
+                      <PinInput />
                     </div>
                     <button className='bg-primary w-full rounded-xl h-[55px] text-white'>
-                      <div>Edit Phone Number</div>
+                      <div>Continue</div>
                     </button>
                   </div>
                 </div>
@@ -64,4 +68,4 @@ function ManagePhoneNumber({user, token}) {
     )
 }
 
-export default ManagePhoneNumber
+export default ChangePin
