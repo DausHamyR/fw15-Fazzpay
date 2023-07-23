@@ -38,7 +38,7 @@ function Transfer({token}) {
     const getUsers = React.useCallback(async(page=1, search='')=>{
         console.log('tes')
         console.log(token)
-        const {data} = await http(token).get('/users', {params: {page, search, limit: 5}})
+        const {data} = await http(token).get('/users', {params: {page, search, limit: 4}})
         console.log(data)
         setRecipient(data)
     }, [token])

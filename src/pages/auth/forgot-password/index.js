@@ -27,9 +27,8 @@ function ResetPassword() {
                 setLoading(false)
             }
         }catch(err){
-            if(err){
-                setErrorMessage('wrong email')
-                setLoading(false)
+            if(err.response.data.message = "auth_forgot_already_requested"){
+              setErrorMessage("auth_forgot_already_requested")
             }
             setSuccessMessage('')
         }

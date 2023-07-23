@@ -7,7 +7,7 @@ const http = (token,) => {
     }
     const instance = axios.create({
         headers,
-        baseURL: process.env.BASEURL
+        baseURL: process.env.NEXT_PUBLIC_BASEURL
     })
     instance.interceptors.response.use((response)=> {
         return response

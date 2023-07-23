@@ -68,14 +68,14 @@ function Home({user, token, history}) {
             <Navbar token={token}/>
             <div className='flex justify-center gap-8 my-20'>
                 <div className='max-md:hidden'>
-                  <Dashboard />
+                  <Dashboard token={token}/>
                 </div>
                 <div className='bg-white max-w-[850px] w-[850px] rounded-xl'>
                   <div className='h-[190px] bg-[#05BFDB] rounded-xl p-6 '>
                     <div className='h-full flex justify-between'>
                       <div className='flex flex-col justify-around text-white h-full'>
                         <div className='text-lg font-semibold'>Balance</div>
-                        <div className='text-3xl font-bold'>{user.balance === null ? 'Rp 0' : user.balance}</div>
+                        <div className='text-3xl font-bold'>{user?.balance ? `Rp ${Number(user?.balance).toLocaleString('id')}`: 'Rp.0'}</div>
                         <div className='text-sm font-semibold'>{user.phones}</div>
                       </div>
                       <div className='flex flex-col gap-4'>

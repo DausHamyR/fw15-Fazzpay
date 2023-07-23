@@ -4,18 +4,7 @@ import { withIronSessionSsr } from "iron-session/next";
 import http from '@/helpers/http.helper';
 import PinInput from './PinInput';
 import { useDispatch, useSelector } from 'react-redux';
-
-export const getServerSideProps = withIronSessionSsr(
-    async function getServerSideProps({ req }) {
-        const token = req.session?.token
-        return {
-            props: {
-                token,
-            },
-        };
-    },
-    cookieConfig
-);
+import { clearTransferState } from '@/redux/reducers/transfer';
 
 function TopUp({token}) {
     const [pin, setPin] = React.useState('')
@@ -35,26 +24,29 @@ function TopUp({token}) {
     //     setInputValue(numericValue); // Menggunakan nilai angka tanpa pemformatan
     // };
 
-    const doTopUp = async (token) => {
+    const doTopUp = async (e) => {
+        e.preventDefault()
+        const {value: amount} = e.target.amount
         const form = new URLSearchParams({amount}).toString()
-        const {data} = await http(token).post('/transactions/topup', form)
+        await http(token).post('/transactions/topup', form)
+        console.log('tes')
         dispatch(clearTransferState())
     }
 
     return (
     <>
-        <label htmlFor='pin-topup' className='btn btn-primary text-white'>TopUp</label>
+        <label htmlFor='pin-topup' className='cursor-pointer'>TopUp</label>
         <input type="checkbox" id="pin-topup" className="modal-toggle" />
         <div className="modal">
         <div className="modal-box flex flex-col gap-4">
             <h3 className="font-bold text-lg">TopUp</h3>
             <p className="py-4">Enter the amount of money, and click submit</p>
-            <div>
-                <PinInput onChangePin={setPin}/>
-            </div>
-            <div className="modal-action">
-            <button onClick={doTopUp} disabled={!(pin.length >= 6)} className="btn btn-primary">Continue</button>
-            </div>
+            <form onSubmit={doTopUp}>
+              <input name='amount' type="number" placeholder='Input Amount' className='input input-bordered w-full' />
+              <div className="modal-action">
+                <button className="btn btn-primary">Submit</button>
+              </div>
+            </form>
         </div>
         </div>
     </>
