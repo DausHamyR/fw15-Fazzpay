@@ -18,9 +18,11 @@ export const getServerSideProps = withIronSessionSsr(
     async function getServerSideProps({ req, res }) {
         const token = req.session?.token
         checkCredentials(token, res, '/auth/login')
+        const {data: dataUser} = await http(token).get('/users')
         return {
             props: {
                 token,
+                transactions: dataUser
             },
         };
     },
@@ -34,7 +36,10 @@ function Transfer({token}) {
     const router = useRouter()
 
     const getUsers = React.useCallback(async(page=1, search='')=>{
-        const {data} = await http(token).get('/users', {params: {page, search, limit: 4}})
+        console.log('tes')
+        console.log(token)
+        const {data} = await http(token).get('/users', {params: {page, search, limit: 5}})
+        console.log(data)
         setRecipient(data)
     }, [token])
 
@@ -53,9 +58,11 @@ function Transfer({token}) {
     return (
         <div className='bg-[#E5E5E5]'>
             <Navbar token={token}/>
-            <div className='flex justify-center gap-8'>
-                <Dashboard />
-                <div className='w-[65%] max-md:w-full max-lg:w-[60%] max-lg:mx-6 h-[678px] bg-white relative top-12 rounded-xl'>
+            <div className='flex justify-center gap-8 my-20'>
+                <div className='max-sm:hidden'>
+                  <Dashboard />
+                </div>
+                <div className='bg-white max-w-[850px] w-[850px] h-[678px] rounded-xl p-12'>
                     <div className='w-[90%] ml-12 max-lg:pr-6'>
                         <div className='grid relative top-12 gap-4 h-20'>
                             <div className='font-bold'>Search Receiver</div>
