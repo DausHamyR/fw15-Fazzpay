@@ -47,9 +47,7 @@ function Register() {
                 return
             }
             const body = new URLSearchParams({username, email, password}).toString()
-            console.log(body)
             const {data} = await http().post('/auth/register', body)
-            console.log(data)
             setSuccessMessage(data.message)
             setErrorMessage('')
             dispatch(saveEmail(email))

@@ -63,108 +63,106 @@ function Home({history, token}) {
     return (
         <div className='bg-[#E5E5E5]'>
             <Navbar token={token}/>
-            <div className='flex justify-center gap-8'>
-                <Dashboard />
-                <div className='w-[950px] h-[678px] bg-white relative top-12 rounded-xl'>
-                    <div className='bg-[#05BFDB] h-[190px] rounded-xl flex justify-between items-center'>
-                        <div className='relative left-8 text-slate-300 text-sm grid gap-5 font-semibold'>
-                            <div>Balance</div>
-                            <div className='text-white text-3xl'>{user?.balance ? `Rp${Number(user?.balance).toLocaleString('id')}`: 'Rp.0'}</div>
-                            <div>{user?.email}</div>
-                        </div>
-                        <div className='grid gap-4 relative right-8'>
-                            <Link href='/transfer' className='w-[162px] h-[57px] bg-slate-300 rounded-xl flex justify-center items-center gap-2'>
-                                <AiOutlineArrowUp size={20} className='text-slate-500'/>
-                                <div className='font-semibold text-lg text-white tracking-wide'>Transfer</div>
-                            </Link>
-                            <Link href='/' className='w-[162px] h-[57px] bg-slate-300 rounded-xl flex justify-center items-center gap-2'>
-                                <AiOutlinePlus size={20} className='text-slate-500'/>
-                                <div className='font-semibold text-lg text-white tracking-wide'>Top Up</div>
-                            </Link>
-                        </div>
-                    </div>
-                    <div className='flex justify-around'>
-                        <div className='grid content-center gap-16 max-lg:hidden'>
-                            <div className='flex justify-around'>
-                                <div className='grid gap-2'>
-                                    <AiOutlineArrowDown size={25} className='text-green-600'/>
-                                    <div>Income</div>
-                                    <div>Rp.{totalTopUp.toLocaleString('id-ID')}</div>
-                                </div>
-                                <div className='grid gap-2'>
-                                    <AiOutlineArrowUp size={25} className='text-red-600'/>
-                                    <div>Expense</div>
-                                    <div>Rp.{totalExpense.toLocaleString('id-ID')}</div>
-                                </div>
-                            </div>
-                            <Image src={graphic} width={300} alt='graphic'/>
-                        </div>
-                        <div className='w-[65%] max-lg:w-full h-[480px] px-12'>
-                            <div className='flex justify-between relative top-4'>
-                                <div className='font-bold'>Transaction History</div>
-                                <Link href='/history' className='text-blue-400'>See all</Link>
-                            </div>
-                            <div className='grid gap-10 mt-16'>
-                                {historyUser.map(historyTransaksi => {
-                                    return (
-                                <div key={`history-${historyTransaksi.id}`} className='flex justify-between'>
-                                    <div className='flex left-4 gap-4'>
-                                        {historyTransaksi.type === "TOP-UP" && (
-                                            <>
-                                                <div>
-                                                    {!historyTransaksi.recipient.picture && <Image src={defaultPicture} className='rounded-xl' width={50} height={50} alt='avatar' />}
-                                                    {historyTransaksi.recipient.picture && <Image src={historyTransaksi.recipient.picture} className='rounded-xl' width={50} height={50} alt='avatar' />}
-                                                </div>
-                                                <div className='grid gap-2'>
-                                                    <div className='font-bold'>{historyTransaksi.recipient.fullName || historyTransaksi.recipient.email}</div>
-                                                    <div className='text-sm'>Topup</div>
-                                                </div>
-                                            </>
-                                        )}
-                                        {historyTransaksi.type === "TRANSFER" && (
-                                            <>
-                                                {historyTransaksi.recipient.id !== user.id &&
-                                                <>
-                                                <div>
-                                                    {!historyTransaksi.recipient.picture && <Image src={defaultPicture} className='rounded-xl' width={50} height={50} alt='avatar' />}
-                                                    {historyTransaksi.recipient.picture && <Image src={historyTransaksi.recipient.picture} className='rounded-xl' width={50} height={50} alt='avatar' />}
-                                                </div>
-                                                <div className='grid gap-2'>
-                                                    <div className='font-bold'>{historyTransaksi.recipient.fullName || historyTransaksi.recipient.email}</div>
-                                                    <div className='text-sm'>Outcome</div>
-                                                </div>
-                                                </>}
-                                                {historyTransaksi.recipient.id === user.id &&
-                                                <>
-                                                <div>
-                                                    {!historyTransaksi.sender.picture && <Image src={defaultPicture} className='rounded-xl' width={50} height={50} alt='avatar' />}
-                                                    {historyTransaksi.sender.picture && <Image src={historyTransaksi.sender.picture} className='rounded-xl' width={50} height={50} alt='avatar' />}
-                                                </div>
-                                                <div className='grid gap-2'>
-                                                    <div className='font-bold'>{historyTransaksi.sender.fullName || historyTransaksi.sender.email}</div>
-                                                    <div className='text-sm'>Income</div>
-                                                </div>
-                                                </>}
-                                            </>
-                                        )}
-                                    </div>
-                                    {historyTransaksi.type === "TOP-UP" &&
-                                        <div className='text-green-600'>+ Rp{Number(historyTransaksi.amount).toLocaleString('id')}</div>
-                                    }
-                                    {historyTransaksi.type === "TRANSFER" && (historyTransaksi.recipient.id === user.id ?
-                                        (<div className='text-green-600'>+ Rp{Number(historyTransaksi.amount).toLocaleString('id')}</div>) : 
-                                        (<div className='text-red-600'>- Rp{Number(historyTransaksi.amount).toLocaleString('id')}</div>) 
-                                    )}
-                                    {/* {historyTransaksi.type === "TOP-UP" &&
-                                        <div className='text-green-600'>+ Rp{Number(historyTransaksi.amount).toLocaleString('id')}</div>
-                                    } */}
-                                </div>
-                                    )
-                                })}
-                            </div>
-                        </div>
-                    </div>
+            <div className='flex justify-center gap-8 my-20'>
+                <div className='max-md:hidden'>
+                  <Dashboard />
                 </div>
+                <div className='bg-white max-w-[850px] w-[850px] rounded-xl'>
+                  <div className='h-[190px] bg-[#05BFDB] rounded-xl p-6 '>
+                    <div className='h-full flex justify-between'>
+                      <div className='flex flex-col justify-around text-white h-full'>
+                        <div className='text-lg font-semibold'>Balance</div>
+                        <div className='text-3xl font-bold'>Rp120.000</div>
+                        <div className='text-sm font-semibold'>+62 813-9387-7946</div>
+                      </div>
+                      <div className='flex flex-col gap-4'>
+                        <Link href='/transfer' className='w-[160px] h-[60px] bg-[#FBFFDC] rounded-xl flex items-center justify-center gap-4'>
+                          <AiOutlineArrowUp size={25} />
+                          <div className='text-xl font-semibold'>Transfer</div>
+                        </Link>
+                        <Link href='/transferr' className='w-[160px] h-[60px] bg-[#FBFFDC] rounded-xl flex items-center justify-center gap-4'>
+                          <AiOutlinePlus size={25} />
+                          <div className='text-xl font-semibold'>Top up</div>
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                  <div className='p-12 flex gap-6 flex-wrap justify-center'>
+                    <div className='flex flex-col gap-8'>
+                      <div className='flex justify-between'>
+                        <div>
+                          <AiOutlineArrowDown color='green' size={25}/>
+                          <div>Income</div>
+                          <div className='font-semibold text-xl'>Rp50.000</div>
+                        </div>
+                        <div>
+                          <AiOutlineArrowUp color='red' size={25}/>
+                          <div>Expense</div>
+                          <div className='font-semibold text-xl'>Rp50.000</div>
+                        </div>
+                      </div>
+                      <div>
+                        <Image src={graphic} alt='graphic'/>
+                      </div>
+                    </div>
+                    <div className='w-1/2 max-lg:w-full'>
+                      <div className='flex justify-between items-center'>
+                        <div className='font-bold text-2xl'>Transaction History</div>
+                        <Link href='/history' className='text-blue-500 font-semibold'>See all</Link>
+                      </div>
+                      <div className='my-4 flex flex-col gap-4'>
+                        <div className='flex justify-between items-center'>
+                          <div className='flex items-center'>
+                            <Image src={defaultPicture} alt='user' className='w-20 h-20 rounded-xl'/>
+                            <div className='flex flex-col gap-2'>
+                              <div className='font-semibold'>Amat Amin Daus</div>
+                              <div>Accept</div>
+                            </div>
+                          </div>
+                          <div>
+                            <div>Rp300.000</div>
+                          </div>
+                        </div>
+                        <div className='flex justify-between items-center'>
+                          <div className='flex items-center'>
+                            <Image src={defaultPicture} alt='user' className='w-20 h-20 rounded-xl'/>
+                            <div className='flex flex-col gap-2'>
+                              <div className='font-semibold'>Amat Amin Daus</div>
+                              <div>Accept</div>
+                            </div>
+                          </div>
+                          <div>
+                            <div>Rp300.000</div>
+                          </div>
+                        </div>
+                        <div className='flex justify-between items-center'>
+                          <div className='flex items-center'>
+                            <Image src={defaultPicture} alt='user' className='w-20 h-20 rounded-xl'/>
+                            <div className='flex flex-col gap-2'>
+                              <div className='font-semibold'>Amat Amin Daus</div>
+                              <div>Accept</div>
+                            </div>
+                          </div>
+                          <div>
+                            <div>Rp300.000</div>
+                          </div>
+                        </div>
+                        <div className='flex justify-between items-center'>
+                          <div className='flex items-center'>
+                            <Image src={defaultPicture} alt='user' className='w-20 h-20 rounded-xl'/>
+                            <div className='flex flex-col gap-2'>
+                              <div className='font-semibold'>Amat Amin Daus</div>
+                              <div>Accept</div>
+                            </div>
+                          </div>
+                          <div>
+                            <div>Rp300.000</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              </div>
             </div>
             <Footer />
         </div>

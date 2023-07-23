@@ -37,7 +37,7 @@ function History({user, history}) {
     return (
         <div className='bg-[#E5E5E5]'>
             <Navbar user={user}/>
-            <div className='flex justify-center gap-8'>
+            <div className='flex justify-center gap-8 my-20'>
                 <Dashboard />
                 <div className='w-[950px] h-[678px] bg-white relative top-12 rounded-xl'>
                     <div className='flex justify-around items-center h-20'>

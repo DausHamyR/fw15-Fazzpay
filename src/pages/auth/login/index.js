@@ -14,7 +14,7 @@ import axios from 'axios';
 export const getServerSideProps = withIronSessionSsr(
     async function getServerSideProps({ req, res }) {
       const token = req.session?.token;
-  
+
       if (token) {
         res.setHeader('location', '/home')
         res.statusCode = 302
@@ -25,7 +25,7 @@ export const getServerSideProps = withIronSessionSsr(
             }
         };
       }
-  
+
       return {
         props: {},
       };
