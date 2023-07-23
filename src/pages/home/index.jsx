@@ -13,19 +13,19 @@ import http from '@/helpers/http.helper';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Dashboard from '@/components/Dashboard';
-import { useSelector } from 'react-redux';
-import profile from '@/redux/reducers/profile';
+import { useDispatch, useSelector } from 'react-redux';
+import profile, { setProfile } from '@/redux/reducers/profile';
 
 export const getServerSideProps = withIronSessionSsr(
     async function getServerSideProps({ req, res }) {
         const token = req.session?.token
         checkCredentials(token, res, '/auth/login')
-        // const {data} = await http(token).get('/profile')
-        const {data: historyTransactions} = await http(token).get('/transactions', {params: {limit:4}})
+        const {data} = await http(token).get('/profile')
+        const {data: historyTransactions} = await http(token).get('/transactions', {params: {limit:5}})
         return {
             props: {
                 token,
-                // user: data.results,
+                user: data.results,
                 history: historyTransactions.results
             },
         };
@@ -33,33 +33,36 @@ export const getServerSideProps = withIronSessionSsr(
     cookieConfig
 );
 
-function Home({history, token}) {
-    const user = useSelector(state => state.profile.data)
-    const [historyUser, setHistoryUser] = useState([])
+function Home({user, token, history}) {
+    // const user = useSelector(state => state.profile.data)
+    // const [historyUser, setHistoryUser] = useState([])
+    const dispatch = useDispatch()
+    dispatch(setProfile(user))
 
-    const getTransaction = React.useCallback(async()=>{
-        const {data} = await http(token).get('/transactions', {params: {limit:4}})
-        setHistoryUser(data.results)
-    },[token])
+    // const getTransaction = React.useCallback(async()=>{
+    //     const {data} = await http(token).get('/transactions', {params: {limit:4}})
+    //     setHistoryUser(data.results)
+    // },[token])
 
-    useEffect(()=> {
-        getTransaction()
-    }, [getTransaction])
+    // useEffect(()=> {
+    //     // getTransaction()
+    //     console.log(history)
+    // }, [history])
 
-    const calculateTotalTopUp = () => {
-        let totalTopUp = 0;
-        let totalExpense = 0;
-        historyUser.forEach((item) => {
-            if (item.type === 'TOP-UP' || item.type === 'accept') {
-                totalTopUp += item.amount;
-            }else if (item.type === 'transfer') {
-                totalExpense += item.amount;
-            }
-        });
-        return {totalTopUp, totalExpense};
-    };
-    const { totalExpense, totalTopUp } = calculateTotalTopUp()
-    
+    // const calculateTotalTopUp = () => {
+    //     let totalTopUp = 0;
+    //     let totalExpense = 0;
+    //     historyUser.forEach((item) => {
+    //         if (item.type === 'TOP-UP' || item.type === 'accept') {
+    //             totalTopUp += item.amount;
+    //         }else if (item.type === 'transfer') {
+    //             totalExpense += item.amount;
+    //         }
+    //     });
+    //     return {totalTopUp, totalExpense};
+    // };
+    // const { totalExpense, totalTopUp } = calculateTotalTopUp()
+
     return (
         <div className='bg-[#E5E5E5]'>
             <Navbar token={token}/>
@@ -72,8 +75,8 @@ function Home({history, token}) {
                     <div className='h-full flex justify-between'>
                       <div className='flex flex-col justify-around text-white h-full'>
                         <div className='text-lg font-semibold'>Balance</div>
-                        <div className='text-3xl font-bold'>Rp120.000</div>
-                        <div className='text-sm font-semibold'>+62 813-9387-7946</div>
+                        <div className='text-3xl font-bold'>{user.balance === null ? 'Rp 0' : user.balance}</div>
+                        <div className='text-sm font-semibold'>{user.phones}</div>
                       </div>
                       <div className='flex flex-col gap-4'>
                         <Link href='/transfer' className='w-[160px] h-[60px] bg-[#FBFFDC] rounded-xl flex items-center justify-center gap-4'>
@@ -111,54 +114,20 @@ function Home({history, token}) {
                         <Link href='/history' className='text-blue-500 font-semibold'>See all</Link>
                       </div>
                       <div className='my-4 flex flex-col gap-4'>
-                        <div className='flex justify-between items-center'>
-                          <div className='flex items-center'>
-                            <Image src={defaultPicture} alt='user' className='w-20 h-20 rounded-xl'/>
+                        {history.map(history => 
+                        <div key={history.id} className='flex justify-between items-center'>
+                          <div className='flex items-center gap-2'>
+                            <Image src={history.recipient.picture === null ? defaultPicture : history.recipient.picture} alt='user' width={50} height={50} className='rounded-full'/>
                             <div className='flex flex-col gap-2'>
-                              <div className='font-semibold'>Amat Amin Daus</div>
-                              <div>Accept</div>
+                              <div className='font-semibold'>{history.recipient.email}</div>
+                              <div>{history.type}</div>
                             </div>
                           </div>
                           <div>
-                            <div>Rp300.000</div>
+                            <div>Rp {history.amount}</div>
                           </div>
                         </div>
-                        <div className='flex justify-between items-center'>
-                          <div className='flex items-center'>
-                            <Image src={defaultPicture} alt='user' className='w-20 h-20 rounded-xl'/>
-                            <div className='flex flex-col gap-2'>
-                              <div className='font-semibold'>Amat Amin Daus</div>
-                              <div>Accept</div>
-                            </div>
-                          </div>
-                          <div>
-                            <div>Rp300.000</div>
-                          </div>
-                        </div>
-                        <div className='flex justify-between items-center'>
-                          <div className='flex items-center'>
-                            <Image src={defaultPicture} alt='user' className='w-20 h-20 rounded-xl'/>
-                            <div className='flex flex-col gap-2'>
-                              <div className='font-semibold'>Amat Amin Daus</div>
-                              <div>Accept</div>
-                            </div>
-                          </div>
-                          <div>
-                            <div>Rp300.000</div>
-                          </div>
-                        </div>
-                        <div className='flex justify-between items-center'>
-                          <div className='flex items-center'>
-                            <Image src={defaultPicture} alt='user' className='w-20 h-20 rounded-xl'/>
-                            <div className='flex flex-col gap-2'>
-                              <div className='font-semibold'>Amat Amin Daus</div>
-                              <div>Accept</div>
-                            </div>
-                          </div>
-                          <div>
-                            <div>Rp300.000</div>
-                          </div>
-                        </div>
+                          )}
                       </div>
                     </div>
                   </div>

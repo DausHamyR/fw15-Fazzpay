@@ -9,17 +9,17 @@ import Navbar from '@/components/Navbar';
 import http from '@/helpers/http.helper';
 import Footer from '@/components/Footer';
 import Dashboard from '@/components/Dashboard';
+import { useDispatch, useSelector } from 'react-redux';
+import { setProfile } from '@/redux/reducers/profile';
 
 export const getServerSideProps = withIronSessionSsr(
     async function getServerSideProps({ req, res }) {
         const token = req.session?.token
         checkCredentials(token, res, '/auth/login')
-        const {data} = await http(token).get('/profile')
         const {data: dataHistoryTransactions} = await http(token).get('/transactions')
         return {
             props: {
                 token,
-                user: data.results,
                 history: dataHistoryTransactions.results
             },
         };
@@ -27,19 +27,22 @@ export const getServerSideProps = withIronSessionSsr(
     cookieConfig
 );
 
-function History({user, history}) {
+function History({history, token}) {
     const [historyUser, setHistoryUser] = useState([])
-    
+    const user = useSelector(state => state.profile.data)
+
     useEffect(()=> {
         setHistoryUser(history)
     }, [history])
 
     return (
         <div className='bg-[#E5E5E5]'>
-            <Navbar user={user}/>
+            <Navbar token={token}/>
             <div className='flex justify-center gap-8 my-20'>
-                <Dashboard />
-                <div className='w-[950px] h-[678px] bg-white relative top-12 rounded-xl'>
+                <div className='max-sm:hidden'>
+                  <Dashboard />
+                </div>
+                <div className='bg-white max-w-[850px] w-[850px] h-[678px] rounded-xl p-12 max-md:p-2'>
                     <div className='flex justify-around items-center h-20'>
                         <div className='font-bold'>Transaction History</div>
                         <div className='w-[155px] h-[40px] bg-slate-200 flex justify-center items-center rounded-xl'>-- Select Filter --</div>
@@ -50,7 +53,7 @@ function History({user, history}) {
                         <div key={`history-${historyUser.id}`} className='flex justify-around items-start'>
                             <Link href={`/history/status/${historyUser.id}`} className='flex gap-4'>
                                 {historyUser.recipient.picture === null ?
-                                    <Image src={defaultPicture} className='rounded-xl' width={50} height={50} alt='avatar' /> :
+                                    <Image src={defaultPicture} className='rounded-xl w-16 h-16' alt='avatar' /> :
                                     <Image src={historyUser.recipient.picture} className='rounded-xl' width={50} height={50} alt='avatar' /> 
                                 }
                                 <div className='grid gap-2'>
