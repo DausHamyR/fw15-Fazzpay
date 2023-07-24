@@ -33,21 +33,26 @@ function ChangePassword({token, user}) {
     const [loading, setLoading] = React.useState(false)
     const [errorMessage, setErrorMessage] = React.useState('')
     const [successMessage, setSuccessMessage] = React.useState('')
+
     const doChangePassword = async (event) => {
         setErrorMessage('')
         try{
-            setLoading(true)
+          console.log('masuk')
+            // setLoading(true)
             event.preventDefault()
             const {value: oldPassword} = event.target.oldPassword
             const {value: newPassword} = event.target.newPassword
             const {value: confirmPassword} = event.target.confirmPassword
+            console.log(oldPassword, newPassword, confirmPassword)
             if(newPassword !== confirmPassword){
                 setErrorMessage('Password and Confirm Password do not match')
                 setLoading(false)
                 return
             }
             const body = new URLSearchParams({oldPassword, newPassword, confirmPassword}).toString()
+            console.log(body)
             const {data} = await http(token).patch('/profile/change-password', body)
+            console.log(data)
             if(data){
                 setSuccessMessage("Successfully changed password")
                 setLoading(false)
@@ -60,7 +65,7 @@ function ChangePassword({token, user}) {
             console.log(results)
             if(message === "profile_change_password_wrong_old"){
                 setErrorMessage('Old password is incorrect.')
-                setLoading(false)
+                // setLoading(false)
             }
             setSuccessMessage('')
         }
@@ -90,7 +95,7 @@ function ChangePassword({token, user}) {
                   <div className='max-w-[350px]'>You must enter your current password and then type your new password twice.</div>
                 </div>
                 <div className='mt-32 mb-32 flex justify-center'>
-                  <form className='max-w-[500px] w-full flex flex-col gap-12'>
+                  <form onSubmit={doChangePassword} className='max-w-[500px] w-full flex flex-col gap-12'>
                     <div className='flex flex-col gap-4'>
                       <div className='flex items-center relative'>
                         <div className='absolute px-4'>

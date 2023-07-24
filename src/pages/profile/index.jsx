@@ -10,55 +10,52 @@ import Navbar from '@/components/Navbar';
 import http from '@/helpers/http.helper';
 import Dashboard from '@/components/Dashboard';
 import Footer from '@/components/Footer';
+import { useDispatch } from 'react-redux';
+import { setProfile as getReduxProfile } from '@/redux/reducers/profile';
 
 export const getServerSideProps = withIronSessionSsr(
     async function getServerSideProps({ req, res }) {
         const token = req.session?.token
         checkCredentials(token, res, '/auth/login')
-
-      const {data} = await http(token).get('/profile')
-  
       return {
         props: {
           token,
-          user: data.results
         },
       };
     },
     cookieConfig
   );
 
-function Profile({user, token}) {
+function Profile({token}) {
   const [selectedImage, setSelectedImage] = React.useState(null);
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    setSelectedImage(file);
-  };
+  const [profile, setProfile] = React.useState()
+  const dispatch = useDispatch()
 
-  const handleSubmit = (event) => {
+  React.useEffect(() => {
+    const getProfile = async() => {
+        const {data} = await http(token).get('/profile')
+        setProfile(data.results)
+        dispatch(getReduxProfile(data.results))
+    }
+    getProfile()
+}, [token, profile, dispatch])
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-
-    // Handle the image upload or processing here
-    // You can send the image to the server using AJAX or fetch
-
-    // Example: create a FormData object and append the image file
     const formData = new FormData();
-    formData.append('image', selectedImage);
-
-    // Make an AJAX request using fetch or any other library
-    fetch('/upload', {
-      method: 'POST',
-      body: formData,
+    formData.append('picture', selectedImage);
+    const {data} = await http(token).patch('/profile', formData, {
+      headers: {
+          'Content-Type': 'multipart/form-data'
+      }
     })
-      .then((response) => {
-        // Handle the response
-        console.log('Image uploaded successfully');
-      })
-      .catch((error) => {
-        // Handle errors
-        console.error('Error uploading image:', error);
-      });
+    dispatch(getReduxProfile(data.results))
+    setSelectedImage(null)
   };
+
+//   React.useEffect(()=> {
+//     console.log(user)
+// }, [user])
 
     return (
         <div className='bg-[#E5E5E5]'>
@@ -69,16 +66,23 @@ function Profile({user, token}) {
                 </div>
                 <div className='bg-white max-w-[850px] w-[850px] h-[678px] rounded-xl p-12'>
                   <div className='flex flex-col gap-6 items-center'>
-                    <div className='flex flex-col items-center gap-2'>
-                      <Image src={defaultPicture} alt='picture' className='w-24 h-24 rounded-full' />
-                      <div className='flex items-center gap-2'>
+                    <form onSubmit={handleSubmit} className='flex flex-col items-center gap-2'>
+                      {profile?.picture ? 
+                      <Image priority={true} src={profile?.picture} alt='picture' width={120} height={120} className='rounded-xl' /> :
+                      <Image priority={true} src={defaultPicture} alt='picture' className='w-24 h-24 rounded-full' /> 
+                      }
+                      <label className='flex items-center gap-2 cursor-pointer'>
                         <AiOutlineEdit />
                         <div className='max-w-[350px]'>Edit</div>
-                      </div>
-                    </div>
+                        <input name='picture' onChange={(e)=>setSelectedImage(e.target.files[0])} type="file" className='hidden'/>
+                      </label>
+                      {selectedImage && 
+                        <button type='submit' className='btn btn-primary'>Save</button>
+                      }
+                    </form>
                     <div className='text-center'>
-                      <div className='font-bold text-xl'>Amat Amin Daus</div>
-                      <div>+62 813-9387-7946</div>
+                      <div className='font-bold text-xl'>{profile?.fullName}</div>
+                      <div>{profile?.phones}</div>
                     </div>
                   </div>
                   <div className='mt-12 mb-12 flex flex-col gap-6 items-center'>

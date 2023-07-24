@@ -14,7 +14,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Dashboard from '@/components/Dashboard';
 import { useDispatch, useSelector } from 'react-redux';
-import profile, { setProfile } from '@/redux/reducers/profile';
+import { setProfile } from '@/redux/reducers/profile';
 
 export const getServerSideProps = withIronSessionSsr(
     async function getServerSideProps({ req, res }) {
@@ -120,11 +120,11 @@ function Home({user, token, history}) {
                             <Image src={history.recipient.picture === null ? defaultPicture : history.recipient.picture} alt='user' width={50} height={50} className='rounded-full'/>
                             <div className='flex flex-col gap-2'>
                               <div className='font-semibold'>{history.recipient.email}</div>
-                              <div>{history.type}</div>
+                              <div className={history.type === "TOP-UP" ? 'text-green-500' : 'text-red-500'}>{history.type}</div>
                             </div>
                           </div>
-                          <div>
-                            <div>Rp {history.amount}</div>
+                          <div className='font-semibold'>
+                            <div className={history.type === "TOP-UP" ? 'text-green-500' : 'text-red-500'}>Rp{Number(history.amount).toLocaleString('id')}</div>
                           </div>
                         </div>
                           )}

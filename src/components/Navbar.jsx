@@ -2,20 +2,15 @@ import React from 'react'
 import Image from 'next/image';
 import defaultPicture from '../../public/daw.jpg';
 import {FiBell} from 'react-icons/fi'
-import cookieConfig from '@/helpers/cookieConfig';
-import { withIronSessionSsr } from "iron-session/next";
-import checkCredentials from '@/helpers/checkCredentials';
-import http from '@/helpers/http.helper';
-import { useDispatch, useSelector } from 'react-redux';
-import { setProfile } from '@/redux/reducers/profile';
+import { useSelector } from 'react-redux';
 
 function Navbar({token}) {
   const user = useSelector(state => state.profile.data)
 
-    React.useEffect(()=> {
-        console.log(user)
-        console.log(token)
-    }, [user, token])
+    // React.useEffect(()=> {
+    //     console.log(user)
+    //     console.log(token)
+    // }, [user, token])
 
 return (
     <div>
