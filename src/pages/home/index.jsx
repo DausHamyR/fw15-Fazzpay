@@ -15,6 +15,7 @@ import Footer from '@/components/Footer';
 import Dashboard from '@/components/Dashboard';
 import { useDispatch, useSelector } from 'react-redux';
 import { setProfile } from '@/redux/reducers/profile';
+import TopUp from '@/components/TopUp';
 
 export const getServerSideProps = withIronSessionSsr(
     async function getServerSideProps({ req, res }) {
@@ -88,10 +89,10 @@ function Home({token, history}) {
                           <AiOutlineArrowUp size={25} />
                           <div className='text-xl font-semibold'>Transfer</div>
                         </Link>
-                        <Link href='/transferr' className='w-[160px] h-[60px] bg-[#FBFFDC] rounded-xl flex items-center justify-center gap-4'>
+                        <div className='w-[160px] h-[60px] bg-[#FBFFDC] rounded-xl flex items-center justify-center gap-4'>
                           <AiOutlinePlus size={25} />
-                          <div className='text-xl font-semibold'>Top up</div>
-                        </Link>
+                          <TopUp token={token} style={'text-xl font-semibold'} />
+                        </div>
                       </div>
                     </div>
                   </div>

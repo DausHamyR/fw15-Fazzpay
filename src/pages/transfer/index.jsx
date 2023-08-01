@@ -36,10 +36,7 @@ function Transfer({token}) {
     const router = useRouter()
 
     const getUsers = React.useCallback(async(page=1, search='')=>{
-        console.log('tes')
-        console.log(token)
         const {data} = await http(token).get('/users', {params: {page, search, limit: 4}})
-        console.log(data)
         setRecipient(data)
     }, [token])
 
@@ -62,14 +59,14 @@ function Transfer({token}) {
                 <div className='max-sm:hidden'>
                   <Dashboard />
                 </div>
-                <div className='bg-white max-w-[850px] w-[850px] h-[678px] rounded-xl p-12'>
-                    <div className='w-[90%] ml-12 max-lg:pr-6'>
+                <div className='bg-white max-w-[850px] w-[850px] h-[678px] rounded-xl px-12 max-md:px-4'>
+                    <div className='w-[90%] ml-12 max-lg:pr-6 max-md:ml-4'>
                         <div className='grid relative top-12 gap-4 h-20'>
                             <div className='font-bold'>Search Receiver</div>
                             <input onChange={(e)=> setSearch(e.target.value)} type="text" placeholder="Search receiver here" class="input input-bordered w-full bg-slate-200 pl-16" />
                             <AiOutlineSearch size={30} className='relative top-[-55px] left-4 text-slate-400'/>
                         </div>
-                        <div className='grid gap-12 relative top-[100px]'>
+                        <div className='grid gap-10 relative top-[100px]'>
                             {recipient.results?.map(historyTransaksi => {
                                 return (
                             // <div onClick={()=>dispatch(setRecipientAction(historyUser))} key={`transaksi-${historyUser.id}`} className='cursor-pointer grid grid-col justify-items-start content-between'>

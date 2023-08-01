@@ -6,7 +6,7 @@ import PinInput from './PinInput';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearTransferState } from '@/redux/reducers/transfer';
 
-function TopUp({token}) {
+function TopUp({token, style}) {
     const [pin, setPin] = React.useState('')
     const [openModal, setOpenModal] = React.useState(false)
     const dispatch = useDispatch()
@@ -36,7 +36,7 @@ function TopUp({token}) {
 
     return (
     <>
-        <label htmlFor='pin-topup' className='cursor-pointer' onClick={()=> setOpenModal(true)}>TopUp</label>
+        <label htmlFor='pin-topup' className={`${style} cursor-pointer`} onClick={()=> setOpenModal(true)}>TopUp</label>
         <input type="checkbox" id="pin-topup" className="modal-toggle" checked={openModal}/>
         <div className="modal">
           <div className="modal-box flex flex-col gap-4">

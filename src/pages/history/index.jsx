@@ -16,24 +16,54 @@ export const getServerSideProps = withIronSessionSsr(
     async function getServerSideProps({ req, res }) {
         const token = req.session?.token
         checkCredentials(token, res, '/auth/login')
-        const {data: dataHistoryTransactions} = await http(token).get('/transactions')
+        // const {data: dataHistoryTransactions} = await http(token).get('/transactions')
         return {
             props: {
                 token,
-                history: dataHistoryTransactions.results
+                // history: dataHistoryTransactions.results
             },
         };
     },
     cookieConfig
 );
 
-function History({history, token}) {
+function History({token}) {
     const [historyUser, setHistoryUser] = useState([])
+    const [sortHistory, setSortHistory] = useState(false)
     const user = useSelector(state => state.profile.data)
+    const [sortBy, setSortBy] = React.useState('DESC');
+    const [sortName, setSortName] = React.useState('type');
+    const [paginition, setPaginition] = React.useState(1);
+
+    const sorting = () => {
+      setSortHistory(prevSort => !prevSort);
+    };
+
+    const sortTransfer = () => {
+      setSortBy('DESC');
+    };
+  
+    const sortTopUp = () => {
+      setSortBy('ASC');
+    };
+
+    const getHistory = React.useCallback(
+      async ()=> {
+      const {data} = await http(token).get(`/transactions?page=${paginition}&limit=4&sort=${sortBy}&orderBy=${sortName}`)
+      setHistoryUser(data.results)
+  }, [token, sortBy, sortName, paginition])
 
     useEffect(()=> {
-        setHistoryUser(history)
-    }, [history])
+        getHistory()
+    }, [getHistory])
+
+    const pageNext = () => {
+      setPaginition(paginition + 1);
+    };
+  
+    const pagePrev = () => {
+      setPaginition(paginition - 1);
+    };
 
     return (
         <div className='bg-[#E5E5E5]'>
@@ -45,12 +75,24 @@ function History({history, token}) {
                 <div className='bg-white max-w-[850px] w-[850px] h-[678px] rounded-xl p-12 max-md:p-2'>
                     <div className='flex justify-around items-center h-20'>
                         <div className='font-bold'>Transaction History</div>
-                        <div className='w-[155px] h-[40px] bg-slate-200 flex justify-center items-center rounded-xl'>-- Select Filter --</div>
+                        <div className='flex items-center gap-6'>
+                          {sortHistory &&
+                            <div className='flex flex-col gap-2 text-white'>
+                              <button onClick={()=> sortTransfer()} className='bg-red-400 w-32 h-8 rounded-md flex items-center justify-center'>
+                                sort by Transfer
+                              </button>
+                              <button onClick={()=> sortTopUp()} className='bg-green-400 w-32 h-8 rounded-md flex items-center justify-center'>
+                                sort by TopUp
+                              </button>
+                            </div>
+                          }
+                          <div onClick={()=> sorting()} className='w-[155px] h-[40px] bg-slate-200 flex justify-center items-center rounded-xl cursor-pointer'>-- Select Filter --</div>
+                        </div>
                     </div>
                     <div className='grid gap-8 mt-6'>
                         {historyUser.map(historyUser => {
                             return (
-                        <div key={`history-${historyUser.id}`} className='flex justify-around items-start'>
+                        <div key={`history-${historyUser.id}`} className='flex justify-around items-center'>
                             <Link href={`/history/status/${historyUser.id}`} className='flex gap-4'>
                                 {historyUser.recipient.picture === null ?
                                     <Image src={defaultPicture} className='rounded-xl w-16 h-16' alt='avatar' /> :
@@ -70,6 +112,10 @@ function History({history, token}) {
                         </div>
                             )
                         })}
+                        <div className='flex justify-center mt-4 gap-6'>
+                          <div onClick={() => pagePrev()} className='w-16 rounded-md text-center font-semibold h-6 bg-slate-300 cursor-pointer'>Prev</div>
+                          <div onClick={() => pageNext()} className='w-16 rounded-md text-center font-semibold h-6 bg-slate-400 cursor-pointer'>Next</div>
+                        </div>
                     </div>
                 </div>
             </div>
