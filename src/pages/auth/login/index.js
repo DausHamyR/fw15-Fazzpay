@@ -16,7 +16,9 @@ export const getServerSideProps = withIronSessionSsr(
       const token = req.session?.token;
 
       if (token) {
+        console.log('login')
         res.setHeader('location', '/home')
+        console.log('login masuk')
         res.statusCode = 302
         res.end()
         return {

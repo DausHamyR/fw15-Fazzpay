@@ -20,12 +20,12 @@ export const getServerSideProps = withIronSessionSsr(
     async function getServerSideProps({ req, res }) {
         const token = req.session?.token
         checkCredentials(token, res, '/auth/login')
-        const {data} = await http(token).get('/profile')
+        // const {data} = await http(token).get('/profile')
         const {data: historyTransactions} = await http(token).get('/transactions', {params: {limit:5}})
         return {
             props: {
                 token,
-                user: data.results,
+                // user: data.results,
                 history: historyTransactions.results
             },
         };
@@ -33,21 +33,26 @@ export const getServerSideProps = withIronSessionSsr(
     cookieConfig
 );
 
-function Home({user, token, history}) {
+function Home({token, history}) {
     // const user = useSelector(state => state.profile.data)
     // const [historyUser, setHistoryUser] = useState([])
+    const [user, setUser] = useState([])
     const dispatch = useDispatch()
-    dispatch(setProfile(user))
+    
 
     // const getTransaction = React.useCallback(async()=>{
     //     const {data} = await http(token).get('/transactions', {params: {limit:4}})
     //     setHistoryUser(data.results)
     // },[token])
+    const getProfile = React.useCallback(async()=>{
+      const {data} = await http(token).get('/profile')
+        setUser(data.results)
+        dispatch(setProfile(user))
+    },[token, dispatch, user])
 
-    // useEffect(()=> {
-    //     // getTransaction()
-    //     console.log(history)
-    // }, [history])
+    useEffect(()=> {
+      getProfile()
+    }, [getProfile])
 
     // const calculateTotalTopUp = () => {
     //     let totalTopUp = 0;

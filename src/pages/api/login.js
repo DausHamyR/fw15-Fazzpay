@@ -3,7 +3,7 @@ import { withIronSessionApiRoute } from "iron-session/next";
 
 export default withIronSessionApiRoute(
   async function loginRoute(req, res) {
-    const request = await fetch('https://outstanding-train-fawn.cyclic.app/auth/login', {
+    const request = await fetch('https://ill-teal-earrings.cyclic.cloud/auth/login', {
       method: "POST",
       body: new URLSearchParams(req.body).toString(),
       headers: {
