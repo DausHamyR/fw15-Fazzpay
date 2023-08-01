@@ -50,7 +50,7 @@ function History({token}) {
     const getHistory = React.useCallback(
       async ()=> {
       const {data} = await http(token).get(`/transactions?page=${paginition}&limit=4&sort=${sortBy}&orderBy=${sortName}`)
-      setHistoryUser(data.results)
+      setHistoryUser(data)
   }, [token, sortBy, sortName, paginition])
 
     useEffect(()=> {
@@ -73,7 +73,7 @@ function History({token}) {
                   <Dashboard />
                 </div>
                 <div className='bg-white max-w-[850px] w-[850px] h-[678px] rounded-xl p-12 max-md:p-2'>
-                    <div className='flex justify-around items-center h-20'>
+                    <div className='flex justify-around items-center flex-wrap h-20'>
                         <div className='font-bold'>Transaction History</div>
                         <div className='flex items-center gap-6'>
                           {sortHistory &&
@@ -90,7 +90,7 @@ function History({token}) {
                         </div>
                     </div>
                     <div className='grid gap-8 mt-6'>
-                        {historyUser.map(historyUser => {
+                        {historyUser.results?.map(historyUser => {
                             return (
                         <div key={`history-${historyUser.id}`} className='flex justify-around items-center'>
                             <Link href={`/history/status/${historyUser.id}`} className='flex gap-4'>
@@ -113,8 +113,9 @@ function History({token}) {
                             )
                         })}
                         <div className='flex justify-center mt-4 gap-6'>
-                          <div onClick={() => pagePrev()} className='w-16 rounded-md text-center font-semibold h-6 bg-slate-300 cursor-pointer'>Prev</div>
-                          <div onClick={() => pageNext()} className='w-16 rounded-md text-center font-semibold h-6 bg-slate-400 cursor-pointer'>Next</div>
+                          <button disabled={paginition <= 1} onClick={() => pagePrev()} className='w-16 rounded-md text-center font-semibold h-6 bg-slate-300'>Prev</button>
+                          <div className='font-bold'>{historyUser.pageInfo?.page}</div>
+                          <button disabled={paginition === historyUser.pageInfo?.totalPage} onClick={() => pageNext()} className='w-16 rounded-md text-center font-semibold h-6 bg-slate-400'>Next</button>
                         </div>
                     </div>
                 </div>
