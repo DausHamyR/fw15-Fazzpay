@@ -54,9 +54,11 @@ function Status({token}) {
     return (
         <div className='bg-[#E5E5E5]'>
             <Navbar token={token}/>
-            <div className='flex justify-center gap-8'>
+            <div className='flex justify-center gap-8 my-20'>
+              <div className='max-sm:hidden'>
                 <Dashboard />
-                <div className='w-[950px] h-[678px] bg-white relative top-12 rounded-xl'>
+              </div>
+                <div className='w-[950px] h-[678px] bg-white rounded-xl'>
                     <div className='grid content-center justify-items-center relative top-6'>
                         <Image src={statusSuccess} alt='success' />
                         <div className='font-bold tracking-wide'>Transfer Success</div>
