@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Image from 'next/image';
 import mail from '../../../../public/mail.png';
-import phone from '../../../../public/Group 57.png';
+import phone from '../../../../public/Group57.png';
 import Head from 'next/head';
 import {useRouter} from 'next/router';
 import http from '@/helpers/http.helper';

@@ -9,7 +9,7 @@ import partners4 from '../../public/Group21.png';
 import partners5 from '../../public/Group22.png';
 import partners6 from '../../public/Group23.png';
 import phone2 from '../../public/png-phone2.png';
-import avatar from '../../public/Rectangle 25.png';
+import avatar from '../../public/Rectangle25.png';
 import Link from 'next/link'
 
 function LandingPage() {

@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import Image from 'next/image';
 import lock from '../../../../public/lock.png';
-import phone from '../../../../public/Group 57.png';
+import phone from '../../../../public/Group57.png';
 import {AiOutlineEyeInvisible, AiOutlineEye, AiOutlineMail} from 'react-icons/ai';
 import Head from 'next/head';
 import http from '@/helpers/http.helper';

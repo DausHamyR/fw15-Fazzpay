@@ -2,7 +2,7 @@ import React from 'react'
 import Image from 'next/image';
 import mail from '../../../../public/mail.png';
 import lock from '../../../../public/lock.png';
-import phone from '../../../../public/Group 57.png';
+import phone from '../../../../public/Group57.png';
 import {AiOutlineEyeInvisible, AiOutlineEye} from 'react-icons/ai';
 import {AiOutlineUser} from 'react-icons/ai';
 import Link from 'next/link'
