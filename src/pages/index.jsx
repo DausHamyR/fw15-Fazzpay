@@ -2,12 +2,12 @@ import React from 'react'
 import Image from 'next/image';
 import phone from '../../public/png-phone.png';
 import phone1 from '../../public/Group10.png';
-import partners from '../../public/Group 16.png';
-import partners2 from '../../public/Group 17.png';
-import partners3 from '../../public/Group 18.png';
-import partners4 from '../../public/Group 21.png';
-import partners5 from '../../public/Group 22.png';
-import partners6 from '../../public/Group 23.png';
+import partners from '../../public/Group16.png';
+import partners2 from '../../public/Group17.png';
+import partners3 from '../../public/Group18.png';
+import partners4 from '../../public/Group21.png';
+import partners5 from '../../public/Group22.png';
+import partners6 from '../../public/Group23.png';
 import phone2 from '../../public/png-phone2.png';
 import avatar from '../../public/Rectangle 25.png';
 import Link from 'next/link'
