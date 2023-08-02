@@ -69,12 +69,12 @@ function LandingPage() {
               <div className='font-semibold'>We have reached global level and have 100+ brand partners around the globe.</div>
             </div>
             <div className='flex flex-wrap max-w-[580px] justify-center gap-6 max-lg:max-w-full max-lg:gap-2'>
-              <Image src={partners} alt='partner' />
-              <Image src={partners2} alt='partner' />
-              <Image src={partners3} alt='partner' />
-              <Image src={partners4} alt='partner' />
-              <Image src={partners5} alt='partner' />
-              <Image src={partners6} alt='partner' />
+              <Image src={partners} alt="partner" />
+              <Image src={partners2} alt="partner" />
+              <Image src={partners3} alt="partner" />
+              <Image src={partners4} alt="partner" />
+              <Image src={partners5} alt="partner" />
+              <Image src={partners6} alt="partner" />
             </div>
           </div>
           <div className='w-full bg-red-200 px-16 max-lg:px-4 py-12 max-sm:px-8 flex justify-around items-center max-md:flex-wrap-reverse'>

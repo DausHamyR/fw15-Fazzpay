@@ -89,7 +89,7 @@ function Transfer({token}) {
                                             <>
                                                 <div>
                                                     {!historyTransaksi.picture && <Image src={defaultPicture} className='rounded-xl' width={50} height={50} alt='avatar' />}
-                                                    {historyTransaksi.picture && <Image src={historyTransaksi.picture} className='rounded-xl' width={50} height={50} alt='avatar' />}
+                                                    {historyTransaksi.picture && <Image src={historyTransaksi.picture} className='rounded-xl w-12 h-12' width={50} height={50} alt='avatar' />}
                                                 </div>
                                                 <div className='grid gap-2'>
                                                     <div className='font-bold'>{historyTransaksi.fullName}</div>

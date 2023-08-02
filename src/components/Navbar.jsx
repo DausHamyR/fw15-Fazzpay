@@ -18,8 +18,8 @@ return (
             <div className='text-2xl font-semibold text-white'>Pay<span className='text-[#0A4D68]'>Easy</span></div>
             <div className='flex items-center gap-6'>
                 {user?.picture === null ? 
-                    <Image src={defaultPicture} width={60} height={60} className='rounded-full' alt='avatar'/> :
-                    <Image src={user?.picture} width={60} height={60} className='rounded-full' alt='avatar'/>
+                    <Image src={defaultPicture} className='rounded-full w-12 h-12' alt='avatar'/> :
+                    <Image src={user?.picture} width={60} height={60} className='rounded-full w-12 h-12' alt='avatar'/>
                 }
                 <div className='grid'>
                     <div>{user?.username}</div> 
