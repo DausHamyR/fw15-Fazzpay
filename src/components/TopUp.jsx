@@ -1,33 +1,29 @@
 import React from 'react'
-import cookieConfig from '@/helpers/cookieConfig';
-import { withIronSessionSsr } from "iron-session/next";
 import http from '@/helpers/http.helper';
 import PinInput from './PinInput';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearTransferState } from '@/redux/reducers/transfer';
 
 function TopUp({token, style}) {
-    const [pin, setPin] = React.useState('')
+    const [valueTopUp, setValueTopUp] = React.useState('')
     const [openModal, setOpenModal] = React.useState(false)
     const dispatch = useDispatch()
     const amount = useSelector(state => state.transfer.amount)
-    // const [formattedInput, setFormattedInput] = React.useState('');
-    // const [inputValue, setInputValue] = React.useState('');
     const [loading, setLoading] = React.useState(false)
 
-    // const handleInputChange = (event) => {
-    //     const rawValue = event.target.value;
-    //     const numericValue = rawValue.replace(/[^0-9]/g, ''); // Menghapus semua karakter non-angka
-    //     const formattedValue = new Intl.NumberFormat('id-ID').format(
-    //         Number(numericValue)
-    //     ); // Memformat angka dengan format "100.000"
-    //     setFormattedInput(formattedValue);
-    //     setInputValue(numericValue); // Menggunakan nilai angka tanpa pemformatan
-    // };
+    const handleInputChange = (event) => {
+        const rawValue = Number(event.target.value).toLocaleString('id')
+        setValueTopUp(rawValue)
+    };
+
+    const valueTopup = (value) => {
+        return value
+    };
 
     const doTopUp = async (e) => {
         e.preventDefault()
-        const {value: amount} = e.target.amount
+        const {value: amount} = Number(e.target.amount).toLocaleString('id')
+        console.log(value)
         const form = new URLSearchParams({amount}).toString()
         await http(token).post('/transactions/topup', form)
         dispatch(clearTransferState())
@@ -43,7 +39,7 @@ function TopUp({token, style}) {
               <h3 className="font-bold text-lg">TopUp</h3>
               <p className="py-4">Enter the amount of money, and click submit</p>
               <form onSubmit={doTopUp}>
-                <input name='amount' type="number" placeholder='Input Amount' className='input input-bordered w-full' />
+                <input name='amount' type="number" placeholder='Input Amount' className='input input-bordered w-full' onChange={handleInputChange} value={valueTopup} />
                 <div className="modal-action">
                   <button className="btn btn-primary" onClick={()=> setOpenModal(false)}>Submit</button>
                 </div>

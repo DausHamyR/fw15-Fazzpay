@@ -48,8 +48,8 @@ function Home({token, history}) {
     const getProfile = React.useCallback(async()=>{
       const {data} = await http(token).get('/profile')
         setUser(data.results)
-        dispatch(setProfile(user))
-    },[token, dispatch, user])
+        dispatch(setProfile(data.results))
+    },[token, dispatch])
 
     useEffect(()=> {
       getProfile()
