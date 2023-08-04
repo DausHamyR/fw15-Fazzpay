@@ -6,9 +6,17 @@ import {AiOutlineUser, AiOutlinePlus, AiOutlineArrowUp} from 'react-icons/ai';
 import {BsGrid} from 'react-icons/bs';
 import {TbLogout} from 'react-icons/tb';
 import { useRouter } from 'next/router';
+import { useDispatch } from 'react-redux';
+import { clearProfile } from '@/redux/reducers/profile';
 
 function Dashboard({token}) {
   const router = useRouter()
+  const dispatch = useDispatch()
+  const logout = () => {
+    dispatch(clearProfile())
+    router.push('/auth/logout')
+}
+
   return (
     <div className='bg-white max-w-[270px] h-[678px] rounded-xl py-4 px-16 flex flex-col justify-around items-center'>
       <div className='flex flex-col gap-8'>
@@ -29,10 +37,10 @@ function Dashboard({token}) {
           <div>Profile</div>
         </Link>
       </div>
-      <Link href='/auth/logout' className='flex items-center gap-4 hover:text-blue-500 text-red-500 font-semibold'>
+      <button onClick={logout} className='flex items-center gap-4 hover:text-blue-500 text-red-500 font-semibold'>
         <TbLogout size={30}/>
         <div>Logout</div>
-      </Link>
+      </button>
     </div>
   )
 }

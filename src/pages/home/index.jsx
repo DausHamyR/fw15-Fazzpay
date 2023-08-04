@@ -37,23 +37,27 @@ export const getServerSideProps = withIronSessionSsr(
 function Home({token, history}) {
     // const user = useSelector(state => state.profile.data)
     // const [historyUser, setHistoryUser] = useState([])
-    const [user, setUser] = useState([])
+    // const [user, setUser] = useState([])
     const dispatch = useDispatch()
-    
+    // const getUser = useSelector(state => state.profile.data)
+    const user = useSelector(state => state.profile.data)
 
     // const getTransaction = React.useCallback(async()=>{
     //     const {data} = await http(token).get('/transactions', {params: {limit:4}})
     //     setHistoryUser(data.results)
     // },[token])
-    const getProfile = React.useCallback(async()=>{
-      const {data} = await http(token).get('/profile')
-        setUser(data.results)
-        dispatch(setProfile(data.results))
-    },[token, dispatch])
+    // const getProfile = React.useCallback(async()=>{
+    //   const {data} = await http(token).get('/profile')
+    //     setUser(data.results)
+    //     dispatch(setProfile(data.results))
+    // },[token, dispatch])
 
-    useEffect(()=> {
-      getProfile()
-    }, [getProfile])
+    // useEffect(()=> {
+    //   getProfile()
+    //   if(getUser !== user){
+    //     setUser(getUser)
+    //   }
+    // }, [getProfile,getUser,user])
 
     // const calculateTotalTopUp = () => {
     //     let totalTopUp = 0;
