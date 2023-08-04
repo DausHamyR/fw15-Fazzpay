@@ -18,11 +18,9 @@ export const getServerSideProps = withIronSessionSsr(
     async function getServerSideProps({ req, res }) {
         const token = req.session?.token
         checkCredentials(token, res, '/auth/login')
-        const {data: dataUser} = await http(token).get('/users')
         return {
             props: {
                 token,
-                transactions: dataUser
             },
         };
     },
@@ -57,7 +55,7 @@ function Transfer({token}) {
             <Navbar token={token}/>
             <div className='flex justify-center gap-8 my-20'>
                 <div className='max-sm:hidden'>
-                  <Dashboard />
+                  <Dashboard token={token}/>
                 </div>
                 <div className='bg-white max-w-[850px] w-[850px] h-[678px] rounded-xl px-12 max-md:px-4'>
                     <div className='w-[90%] ml-12 max-lg:pr-6 max-md:ml-4'>
@@ -69,21 +67,6 @@ function Transfer({token}) {
                         <div className='grid gap-10 relative top-[100px]'>
                             {recipient.results?.map(historyTransaksi => {
                                 return (
-                            // <div onClick={()=>dispatch(setRecipientAction(historyUser))} key={`transaksi-${historyUser.id}`} className='cursor-pointer grid grid-col justify-items-start content-between'>
-                            //     <div className='flex gap-4 drop-shadow-lg rounded-lg bg-white w-full'>
-                            //         {historyUser.picture === null ?
-                            //             <Image src={defaultPicture} className='rounded-xl' width={50} height={50} alt='avatar' /> :
-                            //             <Image src={historyUser.picture} className='rounded-xl' width={50} height={50} alt='avatar' />
-                            //         }
-                            //         <div className='grid gap-2'>
-                            //             {historyUser.fullName === null ?
-                            //                 <div className='font-bold'>{historyUser.email}</div> :
-                            //                 <div className='font-bold'>{historyUser.fullName}</div>
-                            //             }
-                            //             <div className='text-sm'>{historyUser.username}</div>
-                            //         </div>
-                            //     </div>
-                            // </div>
                             <div key={`history-${historyTransaksi.id}`} className='flex justify-between'>
                                     <div onClick={()=>dispatch(setRecipientAction(historyTransaksi))} className='cursor-pointer flex left-4 gap-4'>
                                             <>

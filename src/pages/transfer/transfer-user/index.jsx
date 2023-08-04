@@ -57,7 +57,7 @@ function TransferUser({token}) {
             <Navbar token={token}/>
             <div className='flex justify-center gap-8 my-20'>
               <div className='max-sm:hidden'>
-                <Dashboard />
+                <Dashboard token={token}/>
               </div>
                 <div className='w-[65%] max-sm:w-[90%] max-md:w-full max-lg:w-[60%] max-lg:mx-6 h-[678px] bg-white rounded-xl'>
                     <div className='w-[90%] ml-12 max-md:ml-4 max-lg:pr-6'>
@@ -77,7 +77,7 @@ function TransferUser({token}) {
                         <div className='relative top-28 flex flex-col justify-center gap-8'>
                             <div className='max-w-[350px] text-slate-400'>Type the amount you want to transfer and then press continue to the next steps.</div>
                             <div className='grid justify-items-center gap-6'>
-                            <input onChange={(e)=>dispatch(setAmount(checkAmount(e.target.value)))} name='input-transfer' type='number' className='border-4 rounded-xl text-5xl text-slate-400 text-center w-[60%] max-md:w-full' defaultValue='0.00' value={checkAmount(amount)}/>
+                            <input onChange={(e)=>dispatch(setAmount(checkAmount(e.target.value)))} name='input-transfer' type='number' className='border-4 rounded-xl text-5xl text-slate-400 text-center w-[60%] max-md:w-full' defaultValue='0.00' value={Number(checkAmount(amount)).toLocaleString('id')}/>
                                 <div className='font-bold'>Rp{Number(profile.balance).toLocaleString('id')} Available</div>
                                 <div>
                                     <div className='grid gap-1'>
