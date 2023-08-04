@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react'
 import Image from 'next/image';
 import {FiBell} from 'react-icons/fi'
 import logout from '../../../../public/log-out.png';
-import statusSuccess from '../../../../public/Group 39.png';
+import statusSuccess from '../../../../public/Group39.png';
 import grid from '../../../../public/grid.svg';
 import {AiOutlineUser} from 'react-icons/ai';
 import {AiOutlinePlus} from 'react-icons/ai';
